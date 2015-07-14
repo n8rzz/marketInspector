@@ -1,0 +1,6 @@
+development:
+  adapter: postgresql
+  database: marketInspector_development
+  username: marketInspector
+  password: marketInspector
+  host: localhost
