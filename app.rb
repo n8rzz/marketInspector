@@ -3,10 +3,19 @@ require 'sinatra/activerecord'
 require 'sinatra/base'
 require './config/environments'
 require './models/tickerSymbol'
+require './models/dataPayload'
 
 # class MarketInspector < Sinatra::Base
     get '/' do
       "Hello World"
+    end
+
+    # get data payload
+    get '/payload' do
+        content_type :json
+
+        @payload = DataPayload.all
+        @payload.to_json
     end
 
 
