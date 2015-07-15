@@ -1,0 +1,14 @@
+{
+  "name": "MARKET.Inspector",
+  "version": "1.0.0",
+  "authors": [
+    "Nate Geslin"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "angular": "~1.4.2",
+    "requirejs": "~2.1.19",
+    "requirejs-text": "~2.0.14"
+  }
+}

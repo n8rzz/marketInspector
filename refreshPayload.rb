@@ -42,18 +42,14 @@ class RefreshPayload < ActiveRecord::Base
 
     def RefreshPayload.fetch()
         url = RefreshPayload.buildURL
-       resp = Net::HTTP.get_response(URI.parse(url))
-       data = resp.body
-       response = JSON.parse(data)
+        resp = Net::HTTP.get_response(URI.parse(url))
+        data = resp.body
+        response = JSON.parse(data)
 
-       puts response
-       @payload = DataPayload.create(:payload => response)
-       # parseResponse(response)
+        puts response
+        @payload = DataPayload.create(:payload => response)
+
     end
-
-    # def parseResponse(response)
-    #     puts response
-    # end
 
 
     RefreshPayload.fetch()
