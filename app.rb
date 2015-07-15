@@ -1,6 +1,9 @@
-require 'sinatra'
-require 'sinatra/activerecord'
-require 'sinatra/base'
+# require 'sinatra'
+# require 'sinatra/activerecord'
+# require 'sinatra/base'
+require 'bundler'
+Bundler.require
+
 require './config/environments'
 require './models/tickerSymbol'
 require './models/dataPayload'
