@@ -9,9 +9,20 @@
 
     <h3>Indicies</h3>
     <h3>ETF</h3>
+
     <h3>Stocks</h3>
+
     <div ng-controller="StockController">
-        {{_payload}}
+        <ul>
+            <li ng-repeat="stock in stocks">
+                <ol style="margin: 0;padding: 0;list-style-type: none;">
+                    <li ng-bind="stock.symbol" style="display:inline-block;"></li>
+                    <li ng-bind="stock.open" style="display:inline-block;"></li>
+                    <li ng-bind="stock.close" style="display:inline-block;"></li>
+                    <li ng-bind="stock.volume" style="display:inline-block;"></li>
+                </ol>
+            </li>
+        </ul>
     </div>
 
 
