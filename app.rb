@@ -11,7 +11,8 @@ require './models/dataPayload'
 
 get '/' do
   # File.read(File.join('public', 'index.html'))
-  html :index
+  # html :index
+  erb :index
 end
 
 

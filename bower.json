@@ -1,11 +1,6 @@
 {
   "name": "MARKET.Inspector",
   "version": "1.0.0",
-  "main": "app.rb",
-  "moduleType": [
-    "amd",
-    "yui"
-  ],
   "authors": [
     "Nate Geslin"
   ],
