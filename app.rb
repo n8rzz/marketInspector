@@ -8,84 +8,90 @@ require './config/environments'
 require './models/tickerSymbol'
 require './models/dataPayload'
 
-# class MarketInspector < Sinatra::Base
-    get '/' do
-      "Hello World"
+
+get '/' do
+  # File.read(File.join('public', 'index.html'))
+  html :index
+end
+
+
+## PAYLOAD
+# get data payload
+get '/payload' do
+    content_type :json
+
+    @payload = DataPayload.last()
+    @payload.to_json
+end
+
+
+## TICKER
+#get all the Tickers
+get '/tickers' do
+    content_type :json
+
+    @tickers = TickerSymbol.all
+    @tickers.to_json
+end
+
+# add a new ticker
+post '/tickers/add' do
+    content_type :json
+
+    @ticker = TickerSymbol.new(params)
+
+    if @ticker.save
+        @ticker.to_json
+    else
+        halt 500
     end
+end
 
-    # get data payload
-    get '/payload' do
-        content_type :json
+# get a single ticker
+get '/tickers/:id' do
+    content_type :json
 
-        @payload = DataPayload.all
-        @payload.to_json
+    @ticker = TickerSymbol.find_by_id(params[:id])
+
+    if @ticker
+        @ticker.to_json
+    else
+        halt 404
     end
+end
 
+# update a single ticker
+put '/tickers/:id' do
+    content_type :json
 
-    #get all the Tickers
-    get '/tickers' do
-        content_type :json
+    @ticker = TickerSymbol.find_by_id(params[:id])
+    @ticker.update(params)
 
-        @tickers = TickerSymbol.all
-        @tickers.to_json
+    if @ticker.save
+        @ticker.to_json
+    else
+        halt 500
     end
+end
 
-    # add a new ticker
-    post '/tickers/add' do
-        content_type :json
+# delete a single ticker
+delete '/tickers/:id' do
+    content_type :json
 
-        @ticker = TickerSymbol.new(params)
-
-        if @ticker.save
-            @ticker.to_json
-        else
-            halt 500
-        end
+    @ticker = TickerSymbol.find_by_id(params[:id].to_i)
+    if @ticker.destroy
+        {:success => "success"}.to_json
+    else
+        halt 500
     end
-
-    # get a single ticker
-    get '/tickers/:id' do
-        content_type :json
-
-        @ticker = TickerSymbol.find_by_id(params[:id])
-
-        if @ticker
-            @ticker.to_json
-        else
-            halt 404
-        end
-    end
-
-    # update a single ticker
-    put '/tickers/:id' do
-        content_type :json
-
-        @ticker = TickerSymbol.find_by_id(params[:id])
-        @ticker.update(params)
-
-        if @ticker.save
-            @ticker.to_json
-        else
-            halt 500
-        end
-    end
-
-    # delete a single ticker
-    delete '/tickers/:id' do
-        content_type :json
-
-        @ticker = TickerSymbol.find_by_id(params[:id].to_i)
-        if @ticker.destroy
-            {:success => "success"}.to_json
-        else
-            halt 500
-        end
-    end
+end
 
 
 
-    after do
-        ActiveRecord::Base.connection.close
-    end
+def html(view)
+  File.read(File.join('public/src', "#{view.to_s}.html"))
+end
 
-# end
+after do
+    ActiveRecord::Base.connection.close
+end
