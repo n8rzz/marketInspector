@@ -93,7 +93,6 @@ define([
              * @param  {json}
              */
             StockController.prototype.parseDataResponse = function parseDataResponse(response) {
-                console.log(response.data.payload.query);
                 var i;
                 var quote;
                 var stock;
