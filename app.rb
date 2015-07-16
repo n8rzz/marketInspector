@@ -2,12 +2,16 @@ require 'bundler'
 Bundler.require
 
 require 'sinatra/base'
+require 'sinatra/activerecord'
+
 require './config/environments'
 require './models/tickerSymbol'
 require './models/dataPayload'
 
 
 class MarketInspector < Sinatra::Application
+    register Sinatra::ActiveRecordExtension
+
     get '/' do
       erb :index
     end
