@@ -1,36 +1,33 @@
-require 'rubygems'
-require 'sinatra'
-require 'sinatra/activerecord'
-require 'sinatra/base'
 require 'net/http'
 require './config/environments'
 require './models/tickerSymbol'
 require './models/dataPayload'
 
-set :run, false
+desc "Gather TickerSymbols, assemble url parameters, ping Yahoo Finance APi, temporarily store JSON response"
+task :refreshPayload do
+    def assemble_symbols(type)
+        if type == 'All' || type.nil?
+            @tickerList = TickerSymbol.all
+        else
+            @tickerList = TickerSymbol.where(symbolType: type)
+        end
 
-# for each symbolType === Index || ETF
-# get 1yr daily historical data
-# OHLC + volume
-# calc averages and store in the db
-
-# for each symbolType === Stock
-# get daily data
-# OHLC + volume
-# avg volume, 52wk high/low
-
-class RefreshPayload < ActiveRecord::Base
-    def init
-        # log action to refreshPayloadHistory
+        return @tickerList
     end
 
-    def RefreshPayload.buildURL
+    def buildURL(tickers)
         # build list of tickers
         # should be < 100 and of type 'Stock'
+        $i = 0
         s = []
-        @tickerList = TickerSymbol.where(symbolType: 'Stock')
+        @tickerList = tickers
         @tickerList.each do |t|
             s.push(t.ticker)
+
+            $i +=1
+            if $i > 100
+                break
+            end
         end
 
         baseQuery = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20in%20'
@@ -40,18 +37,17 @@ class RefreshPayload < ActiveRecord::Base
         return baseQuery + '(%22' + escapedQuery + '%22)' + queryTail
     end
 
-    def RefreshPayload.fetch()
-        url = RefreshPayload.buildURL
-        resp = Net::HTTP.get_response(URI.parse(url))
-        data = resp.body
-        response = JSON.parse(data)
+    def fetch
+        @t = assemble_symbols('Stock')
+
+        resp = Net::HTTP.get_response(URI.parse(buildURL(@t)))
+        response = JSON.parse(resp.body)
 
         puts response
         @payload = DataPayload.create(:payload => response)
 
     end
 
-
-    RefreshPayload.fetch()
+    fetch
 
 end
