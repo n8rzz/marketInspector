@@ -42,9 +42,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord
-  pg
-  rake
-  shotgun
-  sinatra
-  sinatra-activerecord
+  activerecord (= 4.2.3)
+  pg (= 0.18.2)
+  rake (= 10.4.2)
+  shotgun (= 0.9.1)
+  sinatra (= 1.4.6)
+  sinatra-activerecord (= 2.0.6)
