@@ -1,5 +1,5 @@
-require 'sinatra/activerecord/rake'
 require './app'
+require 'sinatra/activerecord/rake'
 
 class MarketInspector < Sinatra::Application
     register Sinatra::ActiveRecordExtension

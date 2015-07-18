@@ -4,7 +4,7 @@ module Sinatra
     class Application < Base
         #The environment variable DATABASE_URL should be in the following format:
         # => postgres://{user}:{password}@{host}:{port}/path
-        configure :production, :development do
+        configure :production, :development, :test do
             db = URI.parse(ENV['DATABASE_URL'] || 'postgres://localhost/marketInspector_development')
 
             ActiveRecord::Base.establish_connection(
