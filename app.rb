@@ -6,9 +6,9 @@ require 'active_record'
 require 'sinatra/activerecord'
 
 require './config/environments'
-require './models/tickerSymbol'
-require './models/dataPayload'
-# Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
+# require './models/tickerSymbol'
+# require './models/dataPayload'
+Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
 
 
 class MarketInspector < Sinatra::Application
