@@ -3,6 +3,9 @@ Bundler.require
 
 require 'sinatra/base'
 require 'active_record'
+
+
+set :database_file, "#{APP_ROOT}/config/database.yml"
 require 'sinatra/activerecord'
 
 require './config/environments'
