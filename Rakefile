@@ -12,3 +12,5 @@ namespace :db do
 end
 
 Dir.glob('lib/tasks/*.rake').each { |r| load r}
+
+task :default => ['specs']
