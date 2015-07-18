@@ -3,7 +3,7 @@ define([
     'controllers',
     // 'filters',
     'services',
-    // 'directives',
+    'directives',
 ], function (
     ng
 ) {
@@ -13,6 +13,6 @@ define([
         'mi.controllers',
         // 'mi.filters',
         'mi.services',
-        // 'mi.directives'
+         'mi.directives'
     ]);
 });
