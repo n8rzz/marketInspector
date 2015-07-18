@@ -4,10 +4,3 @@ development:
   username: marketInspector
   password: marketInspector
   host: localhost
-
-test:
-  adapter: postgresql
-  database: marketInspector_test
-  username: marketInspector
-  password: marketInspector
-  host: localhost
