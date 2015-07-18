@@ -8,7 +8,6 @@ gem 'pg', '0.18.2'
 gem 'rake', '10.4.2'
 gem 'rack-test'
 gem 'rspec', '3.3.0'
-gem 'rspec'
 
 
 group :development do
