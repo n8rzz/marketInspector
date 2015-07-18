@@ -97,6 +97,7 @@ define([
                 var quote;
                 var stock;
                 var data = response.data.payload.query.results.quote;
+//console.log(data);
                 this.stockSet = new StockCollection();
 
                 for (i = 0; i < data.length; i++) {
@@ -107,7 +108,7 @@ define([
                 }
 
                 $scope.stocks = this.stockSet.items;
-
+//console.log(this.stockSet.items);
                 return this;
             };
 
