@@ -62,7 +62,7 @@ DEPENDENCIES
   pg (= 0.18.2)
   rack-test
   rake (= 10.4.2)
-  rspec
+  rspec (= 3.3.0)
   shotgun (= 0.9.1)
   sinatra (= 1.4.6)
   sinatra-activerecord (= 2.0.6)
