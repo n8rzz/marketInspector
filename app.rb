@@ -2,6 +2,7 @@ require 'bundler'
 Bundler.require
 
 require 'sinatra/base'
+require 'active_record'
 require 'sinatra/activerecord'
 
 require './config/environments'
