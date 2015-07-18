@@ -12,5 +12,5 @@ trim_trailing_whitespace = true
 [*.{rb,ru,rake}]
 indent_size = 2
 
-[Gemfile,Rakefile,Guardfile]
+[Gemfile,Rakefile]
 indent_size = 2
