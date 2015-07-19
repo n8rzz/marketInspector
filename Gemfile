@@ -16,3 +16,7 @@ group :development do
   gem 'guard-rspec', '4.6.2'
   gem 'shotgun', '0.9.1'
 end
+
+group :test do
+  gem 'factory_girl', '~> 4.5.0'
+end
