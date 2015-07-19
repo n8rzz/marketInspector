@@ -5,12 +5,14 @@ require 'sinatra/base'
 require 'active_record'
 require 'sinatra/activerecord'
 require './config/environments'
+require_relative 'config/apiRoutes'
 
 Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
 
 
 class MarketInspector < Sinatra::Application
     register Sinatra::ActiveRecordExtension
+    register Sinatra::ApiRoutes
 
     get '/' do
       erb :index
@@ -92,7 +94,4 @@ class MarketInspector < Sinatra::Application
     after do
         ActiveRecord::Base.connection.close
     end
-
-
-    # run! if app_file = $0
 end
