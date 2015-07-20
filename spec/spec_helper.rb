@@ -1,13 +1,13 @@
-require './app'
-# require 'sinatra'
+# require './app'
+require File.expand_path '../../app.rb', __FILE__
+ENV['RACK_ENV'] = 'test'
+
 require 'rspec'
 require 'rack/test'
+require 'database_cleaner'
 require 'factory_girl'
 require 'factories'
-
-require File.expand_path '../../app.rb', __FILE__
-
-ENV['RACK_ENV'] = 'test'
+require 'shoulda-matchers'
 
 module RSpecMixin
   include Rack::Test::Methods
@@ -47,5 +47,14 @@ RSpec.configure do |config|
   # config.infer_spec_type_from_file_location!
 
   config.include FactoryGirl::Syntax::Methods
+
+  config.before(:suite) do
+    begin
+      DatabaseCleaner.start
+      # FactoryGirl.lint
+    ensure
+      DatabaseCleaner.clean
+    end
+  end
 
 end

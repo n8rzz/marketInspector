@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 ruby '2.2.0'
 
 gem 'sinatra', '1.4.6'
+gem 'sinatra-contrib'
 gem 'activerecord', '4.2.3'
 gem 'sinatra-activerecord', '2.0.6'
 gem 'pg', '0.18.2'
@@ -19,4 +20,6 @@ end
 
 group :test do
   gem 'factory_girl', '~> 4.5.0'
+  gem 'shoulda-matchers', '2.8.0', require: false
+  gem 'database_cleaner', '1.4.1'
 end

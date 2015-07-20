@@ -2,6 +2,7 @@ require 'bundler'
 Bundler.require
 
 require 'sinatra/base'
+# require 'sinatra/contrib/all'
 require 'active_record'
 require 'sinatra/activerecord'
 require './config/environments'
@@ -10,8 +11,9 @@ require_relative 'config/apiRoutes'
 Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
 
 
-class MarketInspector < Sinatra::Application
+class MarketInspector < Sinatra::Base
     register Sinatra::ActiveRecordExtension
+    # register Sinatra::Contrib
     register Sinatra::ApiRoutes
 
     get '/' do
@@ -31,12 +33,17 @@ class MarketInspector < Sinatra::Application
 
     ## TICKER
     #get all the Tickers
-    get '/tickers' do
-        content_type :json
-
-        @tickers = TickerSymbol.all
-        @tickers.to_json
-    end
+    # get '/tickers' do
+    #     content_type :json
+    #
+    #     @tickers = TickerSymbol.all
+    #     if @tickers
+    #       status 200
+    #       @tickers.to_json
+    #     else
+    #       halt 404
+    #     end
+    # end
 
     # add a new ticker
     post '/tickers/add' do
