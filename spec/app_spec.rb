@@ -5,6 +5,5 @@ describe 'Root path' do
     before { get '/' }
 
     it { expect(last_response.status).to eq 200 }
-
   end
 end
