@@ -1,8 +1,8 @@
 FactoryGirl.define do
+    chars = Random.rand(2 .. 4)
 
   factory :tickerSymbol, :class => TickerSymbol do
-    id 1
-    ticker "LPPA"
+    ticker { Faker::Lorem.characters(chars).upcase }
     symbolType "Stock"
   end
 end

@@ -1,13 +1,11 @@
+ENV['RACK_ENV'] = 'test'
+
 require_relative "../app"
 require "rspec"
 require "rack/test"
-
-ENV['RACK_ENV'] = 'test'
-
-require 'rspec'
-require 'rack/test'
 require 'database_cleaner'
 require 'factory_girl'
+require 'faker'
 require 'factories'
 require 'shoulda-matchers'
 
@@ -63,7 +61,29 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-  config.formatter = :documentation
+  # config.formatter = :progress
+
+
+  # Run specs in random order to surface order dependencies. If you find an
+  # order dependency and want to debug it, you can fix the order by providing
+  # the seed, which is printed after each run.
+  #     --seed 1234
+  config.order = :random
+
+  # RSpec Rails can automatically mix in different behaviours to your tests
+  # based on their file location, for example enabling you to call `get` and
+  # `post` in specs under `spec/controllers`.
+  #
+  # You can disable this behaviour by removing the line below, and instead
+  # explicitly tag your specs with their type, e.g.:
+  #
+  #     RSpec.describe UsersController, :type => :controller do
+  #       # ...
+  #     end
+  #
+  # The different available types are documented in the features, such as in
+  # https://relishapp.com/rspec/rspec-rails/docs
+  # config.infer_spec_type_from_file_location!
 
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
@@ -106,40 +126,20 @@ RSpec.configure do |config|
   # particularly slow.
   config.profile_examples = 10
 
-  # Run specs in random order to surface order dependencies. If you find an
-  # order dependency and want to debug it, you can fix the order by providing
-  # the seed, which is printed after each run.
-  #     --seed 1234
-  config.order = :random
-
   # Seed global randomization in this process using the `--seed` CLI option.
   # Setting this allows you to use `--seed` to deterministically reproduce
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
-=end
 
-  # RSpec Rails can automatically mix in different behaviours to your tests
-  # based on their file location, for example enabling you to call `get` and
-  # `post` in specs under `spec/controllers`.
-  #
-  # You can disable this behaviour by removing the line below, and instead
-  # explicitly tag your specs with their type, e.g.:
-  #
-  #     RSpec.describe UsersController, :type => :controller do
-  #       # ...
-  #     end
-  #
-  # The different available types are documented in the features, such as in
-  # https://relishapp.com/rspec/rspec-rails/docs
-  # config.infer_spec_type_from_file_location!
+=end
 
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
     begin
       DatabaseCleaner.start
-      # FactoryGirl.lint
+      FactoryGirl.lint
     ensure
       DatabaseCleaner.clean
     end
