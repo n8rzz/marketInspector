@@ -28,6 +28,7 @@ guard :rspec, cmd: "bundle exec rspec" do
   dsl.watch_spec_files_for(ruby.lib_files)
 
   watch(%r{^spec/(.+)_spec\.rb$})   { |m| "spec/#{m[1]}_spec.rb" }
+  watch('spec/factories.rb')        { "spec" }
   watch(%r{^config/(.+)\.rb$})      { "spec" }
   # watch(%r{^app/(.+)\.rb$})        { "spec/app" }
   watch(%r{^lib/(.+)\.rake$})       { "spec/lib" }
