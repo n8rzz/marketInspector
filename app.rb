@@ -4,15 +4,15 @@ Bundler.require
 require 'sinatra/base'
 require 'active_record'
 require 'sinatra/activerecord'
-
 require './config/environments'
-# require './models/tickerSymbol'
-# require './models/dataPayload'
+require_relative 'config/apiRoutes'
+
 Dir[File.dirname(__FILE__) + '/models/*.rb'].each {|file| require file }
 
 
 class MarketInspector < Sinatra::Application
     register Sinatra::ActiveRecordExtension
+    register Sinatra::ApiRoutes
 
     get '/' do
       erb :index
@@ -24,7 +24,7 @@ class MarketInspector < Sinatra::Application
     get '/payload' do
         content_type :json
 
-        @payload = DataPayload.last()
+        @payload = DataPayload.last
         @payload.to_json
     end
 
@@ -94,7 +94,4 @@ class MarketInspector < Sinatra::Application
     after do
         ActiveRecord::Base.connection.close
     end
-
-
-    # run! if app_file = $0
 end
