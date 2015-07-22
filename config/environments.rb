@@ -1,5 +1,4 @@
 # encoding: utf-8
-
 require 'sinatra/base'
 
 module Sinatra
@@ -19,7 +18,7 @@ module Sinatra
         encoding: 'utf8'
       )
 
-      at_exit { Application.run! if $ERROR_INFO.nil? && Application.run? }
+      # at_exit { Application.run! if $ERROR_INFO.nil? && Application.run? }
     end
   end
 end

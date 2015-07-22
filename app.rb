@@ -11,7 +11,7 @@ require_relative 'config/routes'
 
 Dir[File.dirname(__FILE__) + '/models/*.rb'].each { |file| require file }
 
-class MarketInspector < Sinatra::Application
+class MarketInspector < Sinatra::Base
   register Sinatra::ActiveRecordExtension
   register Sinatra::Contrib
   register Sinatra::Routes
