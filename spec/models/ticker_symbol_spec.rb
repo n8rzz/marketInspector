@@ -6,7 +6,7 @@ describe TickerSymbol do
         expect(build(:tickerSymbol)).to be_instance_of(TickerSymbol)
     end
 
-    let(:row) { FactoryGirl.create :tickerSymbol }
+    let(:row) { FactoryGirl.create(:tickerSymbol) }
 
     describe "data and associations" do
         it { should have_db_column(:ticker) }
