@@ -15,13 +15,12 @@ group :development do
   gem 'guard', '2.12.8'
   gem 'guard-bundler', '2.1.0'
   gem 'guard-rspec', '4.6.2'
-  gem 'shotgun', '0.9.1'
   gem 'rubocop', '0.32.1', require: false
 end
 
 group :test do
   gem 'factory_girl', '~> 4.5.0'
   gem 'shoulda-matchers', '2.8.0', require: false
-  gem 'database_cleaner', '1.4.1', :git => 'git://github.com/bmabey/database_cleaner.git'
+  gem 'database_cleaner', '1.4.1', git: 'git://github.com/bmabey/database_cleaner.git'
   gem 'faker', '1.4.3'
 end

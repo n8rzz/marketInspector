@@ -12,3 +12,6 @@ Style/Encoding:
 
 Documentation:
   Enabled: false
+
+LineLength:
+  Max: 100
