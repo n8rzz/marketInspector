@@ -1,9 +1,10 @@
+# encoding: utf-8
 require File.expand_path '../../spec_helper.rb', __FILE__
 
-describe 'Ticker API', :type => :request do
-    it "has a valid factroy" do
-        expect(build(:tickerSymbol)).to be_instance_of(TickerSymbol)
-    end
+describe 'Ticker API', type: :request do
+  it 'has a valid factroy' do
+    expect(build(:tickerSymbol)).to be_instance_of(TickerSymbol)
+  end
 
   describe 'GET /tickers' do
     before { get '/tickers' }
@@ -11,16 +12,14 @@ describe 'Ticker API', :type => :request do
     it { expect(last_response.status).to eq 200 }
   end
 
-
   describe 'Empty GET /tickers/id' do
-    before { get '/tickers/.'}
+    before { get '/tickers/.' }
     it { expect(last_response.status).to eq 404 }
   end
 
   describe 'GET /tickers/id' do
     it 'must return a single record'
   end
-
 
   describe 'Empty POST /tickers/add' do
     before { post '/tickers/add' }
@@ -41,15 +40,12 @@ describe 'Ticker API', :type => :request do
     # it { response[:symbolType].must_equal "Stock" }
   end
 
-
   describe 'Empty DELETE /tickers/id' do
-    before { delete '/tickers/.'}
+    before { delete '/tickers/.' }
     it { expect(last_response.status).to eq 404 }
   end
 
   describe 'DELETE' do
     it 'must remove a ticker'
   end
-
-
 end
