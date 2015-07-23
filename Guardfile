@@ -1,3 +1,4 @@
+# encoding: utf-8
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
@@ -10,9 +11,8 @@ guard 'bundler' do
   # watch(/^.+\.gemspec/)
 end
 
-
-guard :rspec, cmd: "bundle exec rspec" do
-  require "guard/rspec/dsl"
+guard :rspec, cmd: 'bundle exec rspec' do
+  require 'guard/rspec/dsl'
   dsl = Guard::RSpec::Dsl.new(self)
 
   # Feel free to open issues for suggestions and improvements
@@ -28,12 +28,12 @@ guard :rspec, cmd: "bundle exec rspec" do
   dsl.watch_spec_files_for(ruby.lib_files)
 
   watch(%r{^spec/(.+)_spec\.rb$})   { |m| "spec/#{m[1]}_spec.rb" }
-  watch('spec/factories.rb')        { "spec" }
-  watch(%r{^config/(.+)\.rb$})      { "spec" }
+  watch('spec/factories.rb')        { 'spec' }
+  watch(%r{^config/(.+)\.rb$})      { 'spec' }
   # watch(%r{^app/(.+)\.rb$})        { "spec/app" }
-  watch(%r{^lib/(.+)\.rake$})       { "spec/lib" }
-  watch(%r{^models/(.+)\.rb$})      { "spec/models" }
-  watch(%r{^views/(.+)\.rb$})       { "spec/views" }
-  watch('app.rb')                   { "spec/app_spec.rb" }
-  watch('spec/spec_helper.rb')      { "spec" }
+  watch(%r{^lib/(.+)\.rake$})       { 'spec/lib' }
+  watch(%r{^models/(.+)\.rb$})      { 'spec/models' }
+  watch(%r{^views/(.+)\.rb$})       { 'spec/views' }
+  watch('app.rb')                   { 'spec/app_spec.rb' }
+  watch('spec/spec_helper.rb')      { 'spec' }
 end

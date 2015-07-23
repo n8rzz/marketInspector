@@ -1,16 +1,18 @@
+# encoding: utf-8
+
 require './app'
 require 'sinatra/activerecord/rake'
 
-class MarketInspector < Sinatra::Application
-    register Sinatra::ActiveRecordExtension
+class MarketInspector < Sinatra::Base
+  register Sinatra::ActiveRecordExtension
 end
 
 namespace :db do
-    task :load_config do
-        require './app'
-    end
+  task :load_config do
+    require './app'
+  end
 end
 
-Dir.glob('lib/tasks/*.rake').each { |r| load r}
+Dir.glob('lib/tasks/*.rake').each { |r| load r }
 
-task :default => ['specs']
+task default: ['specs']

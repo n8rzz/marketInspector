@@ -12,9 +12,11 @@ define([
     return [
         '$scope',
         'StockService',
+        'HistoricalStockDataService',
         function(
             $scope,
-            StockService
+            StockService,
+            HistoricalStockDataService
         ) {
 
             /**
@@ -47,6 +49,7 @@ define([
              */
             StockController.prototype.setupHandlers = function setupHandlers() {
                 this.parseDataResponseHandler = $.proxy(this.parseDataResponse, this);
+                this.parseHistoricalDataResponseHandler = $.proxy(this.parseHistoricalDataResponse, this);
 
                 return this;
             };
@@ -97,7 +100,7 @@ define([
                 var quote;
                 var stock;
                 var data = response.data.payload.query.results.quote;
-//console.log(data);
+
                 this.stockSet = new StockCollection();
 
                 for (i = 0; i < data.length; i++) {
@@ -108,7 +111,24 @@ define([
                 }
 
                 $scope.stocks = this.stockSet.items;
-//console.log(this.stockSet.items);
+
+                return this;
+            };
+
+            $scope.populateHistoricalData = function getHistoricalData(symbol) {
+                var startDate = '2014-07-22';
+                var endDate = '2015-07-22';
+                // console.log('getHistoricalData', symbol, startDate, endDate);
+                var response = HistoricalStockDataService.fetchDataPayload(symbol, startDate, endDate);
+
+
+                // return this.parseHistoricalDataResponse(response);
+            };
+
+
+            StockController.prototype.parseHistoricalDataResponse = function parseHistoricalDataResponse(response) {
+                console.log(response);
+
                 return this;
             };
 

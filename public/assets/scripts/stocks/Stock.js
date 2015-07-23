@@ -29,6 +29,7 @@ define([
         this.changeInPercent = this.getChangeInPercent();
         this.volumeDifferenceFromAverage = this.getVolumeAverageDifferenceFromDaysVolume();
         this.oneYearRange = this.getOneYearPriceRange();
+        this.historicalData = [];
     }
 
     /**

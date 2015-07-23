@@ -1,12 +1,15 @@
 define([
     'angular',
-    './stocks/StockService'
+    './stocks/StockService',
+    './stocks/HistoricalStockDataService'
 ], function(
     angular,
-    StockService
+    StockService,
+    HistoricalStockDataService
 ) {
     'use strict';
 
     return angular.module('mi.services', [])
-        .factory('StockService', StockService);
+        .factory('StockService', StockService)
+        .factory('HistoricalStockDataService', HistoricalStockDataService);
 });
