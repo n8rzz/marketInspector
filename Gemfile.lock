@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/bmabey/database_cleaner.git
+  revision: b8edac6bd04fb89a267201fa8d47066d511fd9de
+  specs:
+    database_cleaner (1.4.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -21,7 +27,6 @@ GEM
     backports (3.6.5)
     builder (3.2.2)
     coderay (1.1.0)
-    database_cleaner (1.4.1)
     diff-lcs (1.2.5)
     eventmachine (1.0.7)
     factory_girl (4.5.0)
@@ -129,7 +134,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord (= 4.2.3)
-  database_cleaner (= 1.4.1)
+  database_cleaner (= 1.4.1)!
   factory_girl (~> 4.5.0)
   faker (= 1.4.3)
   guard (= 2.12.8)

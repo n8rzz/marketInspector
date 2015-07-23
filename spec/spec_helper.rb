@@ -10,6 +10,8 @@ require 'faker'
 require 'factories'
 require 'shoulda-matchers'
 
+Dir[File.dirname(__FILE__) + 'spec/support/*.rb'].each { |file| require file }
+
 module RSpecMixin
   include Rack::Test::Methods
   def app
@@ -130,16 +132,13 @@ RSpec.configure do |config|
   #   # test failures related to randomization by passing the same `--seed` value
   #   # as the one that triggered the failure.
   #   Kernel.srand config.seed
-  #
+
+  # config.use_transactional_fixtures = false
 
   config.include FactoryGirl::Syntax::Methods
 
   config.before(:suite) do
-    begin
-      DatabaseCleaner.start
-      FactoryGirl.lint
-    ensure
-      DatabaseCleaner.clean
-    end
+    FactoryGirl.lint
   end
+
 end

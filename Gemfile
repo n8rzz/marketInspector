@@ -22,6 +22,6 @@ end
 group :test do
   gem 'factory_girl', '~> 4.5.0'
   gem 'shoulda-matchers', '2.8.0', require: false
-  gem 'database_cleaner', '1.4.1'
+  gem 'database_cleaner', '1.4.1', :git => 'git://github.com/bmabey/database_cleaner.git'
   gem 'faker', '1.4.3'
 end
