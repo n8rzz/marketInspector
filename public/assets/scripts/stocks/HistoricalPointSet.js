@@ -1,10 +1,14 @@
 define([
     '../lib/util/assert',
     '../lib/util/FastMath',
+    '../lib/util/FinancialMath',
+    '../lib/util/constants',
     './HistoricalPoint'
 ], function(
     assert,
     FastMath,
+    FinancialMath,
+    CONSTANTS,
     HistoricalPoint
 ) {
     'use strict';
@@ -79,7 +83,7 @@ define([
      * @param period
      */
     HistoricalPointSet.prototype.calculateSimpleMovingAverage = function calculateSimpleMovingAverage(startDate, endDate, period) {
-
+        console.log('calculateSimpleMovingAverage', this.items.length);
     };
 
     /**

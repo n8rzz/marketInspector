@@ -13,6 +13,14 @@ define(function(require) {
         }
     }
 
+    Assert.prototype.isNumber = function isNumber(property) {
+        return typeof property === 'number';
+    };
+
+    Assert.prototype.isArray = function isArray(object) {
+        return object instanceof Array;
+    };
+
 
     return Assert;
 });
