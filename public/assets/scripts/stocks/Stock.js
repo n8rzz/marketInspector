@@ -1,11 +1,13 @@
 define([
+    './BaseStockModel',
+    './HistoricalPointSet',
     '../lib/util/FastMath'
 ], function(
+    BaseStockModel,
+    HistoricalPointSet,
     FastMath
 ) {
     'use strict';
-
-    var _id = 0;
 
     /**
      * @class Stock
@@ -13,7 +15,8 @@ define([
      * @param
      */
     function Stock(stock) {
-        this.id = _id++;
+        BaseStockModel.call(this);
+
         this.symbol = stock.symbol;
         this.name = stock.Name;
         this.open = parseFloat(stock.Open);
@@ -29,8 +32,12 @@ define([
         this.changeInPercent = this.getChangeInPercent();
         this.volumeDifferenceFromAverage = this.getVolumeAverageDifferenceFromDaysVolume();
         this.oneYearRange = this.getOneYearPriceRange();
-        this.historicalData = [];
+
+        this.historicalDataSet = new HistoricalPointSet();
     }
+
+    Stock.prototype = new BaseStockModel();
+    Stock.prototype.constructor = Stock;
 
     /**
      * @method getChangeInDollars
