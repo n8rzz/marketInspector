@@ -62,45 +62,53 @@ define([
      */
     HistoricalPointSet.prototype.removeGroup = function removeGroup() {};
 
+
     /////////////////////////////////////////////////////////////////////
     ///
     /////////////////////////////////////////////////////////////////////
 
-    /**
-     *
-     */
-    HistoricalPointSet.prototype.findHighestHigh = function findHighestHigh() {};
 
-    /**
-     *
-     */
+    HistoricalPointSet.prototype.isFirstPoint = function isFirstPoint() {};
+    HistoricalPointSet.prototype.isLastPoint = function isLastPoint() {};
+    HistoricalPointSet.prototype.findHighestHigh = function findHighestHigh() {};
     HistoricalPointSet.prototype.findLowestLow = function findLowestLow() {};
 
     /**
-     *
+     * @method calculateAverage
+     * @for HistoricalPointSet
+     * @param type
+     * @param period
      */
-    HistoricalPointSet.prototype.calculateAverage = function calculateAverage(type, period, startDate, endDate) {
+    HistoricalPointSet.prototype.calculateAverage = function calculateAverage(type, period) {
         console.log('calculateSimpleMovingAverage', 'type:', type, '\tperiod:', period);
+
+        // TODO: historical - new method, assembleValuesToAverage
         var i;
         var item;
         var index;
-        var prices = [];
+        var valuesToAverage = [];
         var length = this.length - 1;
 
         for (i = 0; i < period; i++) {
-            index = length - i;
-            item = this.items[index];
-            prices.push(item.close);
-        }
+            item = this.items[i];
+            valuesToAverage.push(item.close);
 
+            index = i;
+        }
+debugger;
         switch (type) {
             case CONSTANTS.MOVING_AVERAGE_TYPE.SMA :
+                // TODO: historical - new method, calculateSimpleMovingAverageForPeriod
                 var smaLabel = 'sma' + period;
-                var smaValue = FinancialMath.simpleMovingAverage(period, prices);
+
+                // TODO: historical - new method, averageCalculationTest
+                // are there enough values to calculate the avg?
+                var smaValue = FinancialMath.simpleMovingAverage(period, valuesToAverage);
 
                 console.log('smaLabel:', smaLabel, '\tsmaValue:', smaValue);
 
-                //this.items[index - 1].requestToAddAverageToPoint()
+                // TODO: historical - new method, addAverageToHistoricalPoint
+                this.items[0].requestToAddAverageToPoint(period, smaValue);
 
                 break;
             case CONSTANTS.MOVING_AVERAGE_TYPE.EMA :

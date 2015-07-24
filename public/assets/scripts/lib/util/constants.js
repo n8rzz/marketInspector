@@ -84,49 +84,49 @@ define([], function() {
              * @final
              * @type {string}
              * @memberof MOVING_AVERAGE_LENGTH
-             * @property
+             * @property FIVE
              */
             FIVE: 5,
             /**
              * @final
              * @type {string}
              * @memberof MOVING_AVERAGE_LENGTH
-             * @property
+             * @property TEN
              */
             TEN: 10,
             /**
              * @final
              * @type {string}
              * @memberof MOVING_AVERAGE_LENGTH
-             * @property
+             * @property TEN
              */
             TWENTY: 20,
             /**
              * @final
              * @type {string}
              * @memberof MOVING_AVERAGE_LENGTH
-             * @property
+             * @property THIRTY
              */
             THIRTY: 30,
             /**
              * @final
              * @type {string}
              * @memberof MOVING_AVERAGE_LENGTH
-             * @property
+             * @property FIFTY
              */
             FIFTY: 50,
             /**
              * @final
              * @type {string}
              * @memberof MOVING_AVERAGE_LENGTH
-             * @property
+             * @property ONE_HUNDRED
              */
             ONE_HUNDRED: 100,
             /**
              * @final
              * @type {string}
              * @memberof MOVING_AVERAGE_LENGTH
-             * @property
+             * @property TWO_HUNDRED
              */
             TWO_HUNDRED: 200
         }

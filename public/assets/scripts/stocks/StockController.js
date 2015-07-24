@@ -39,7 +39,7 @@ define([
              * @for StockController
              */
             StockController.prototype.init = function init() {
-                this.stockSet = null;
+                this._stockSet = null;
 
 
                 return this.setupHandlers()
@@ -101,8 +101,8 @@ define([
 
             /**
              * @method  parseDataResponse
-             * @for  StockController
-             * @param  {json}
+             * @for StockController
+             * @param response {object}
              */
             StockController.prototype.parseDataResponse = function parseDataResponse(response) {
                 var i;
@@ -110,16 +110,16 @@ define([
                 var stock;
                 var data = response.data.payload.query.results.quote;
 
-                this.stockSet = new StockCollection();
+                this._stockSet = new StockCollection();
 
                 for (i = 0; i < data.length; i++) {
                     quote = data[i];
 
                     stock = new Stock(quote);
-                    this.stockSet.addStock(stock);
+                    this._stockSet.addStock(stock);
                 }
 
-                $scope.stocks = this.stockSet.items;
+                $scope.stocks = this._stockSet.items;
 
                 return this;
             };
@@ -150,7 +150,7 @@ define([
 
                 $scope.hasHistoricalData = true;
                 var rawHistoricalData = response.data.query.results.quote;
-                var symbol = this.stockSet.findStockBySymbol(rawHistoricalData[0].Symbol);
+                var symbol = this._stockSet.findStockBySymbol(rawHistoricalData[0].Symbol);
 
                 return this.addHistoricalDataToStock(symbol, rawHistoricalData);
             };
@@ -185,11 +185,8 @@ define([
 
                 symbol.historicalDataSet.calculateAverage(
                     CONSTANTS.MOVING_AVERAGE_TYPE.SMA,
-                    CONSTANTS.MOVING_AVERAGE_LENGTH.FIVE,
-                    null,
-                    null
+                    CONSTANTS.MOVING_AVERAGE_LENGTH.TWO_HUNDRED
                 );
-
             };
 
             return new StockController();

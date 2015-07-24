@@ -15,27 +15,30 @@ define([
      **/
     return {
         /**
+         * Calculates the simple moving average (SMA) for a given period
+         * Calculated as sum(values) / period
          *
-         * @param period {number}
-         * @param points {Array}
-         * @returns {number}
+         * @param period {number} number to divide sum of values by
+         * @param values {Array|number} array of values to calculate average from
+         * @returns sum {number} average of values over a given period
          */
-        simpleMovingAverage: function simpleMovingAverage(period, points) {
-            assert(period === points.length, 'Period length and Points length must be equal');
-            assert(assert.isArray(points), 'Points must be an Array of values');
+        simpleMovingAverage: function simpleMovingAverage(period, values) {
+            assert(assert.isNumber(period), 'Period must be a number');
+            assert(period === values.length, 'Period length and Points length must be equal');
+            assert(assert.isArray(values), 'Points must be an Array of values');
 
             var i;
-            var length = points.length;
+            var length = values.length;
             var sum = 0;
-debugger;
+
             for (i = 0; i < length; i++) {
-                sum += points[i];
+                sum += values[i];
             }
 
             return sum / period;
         },
 
-        exponentialMovingAverage: function exponentialMovingAverage(period, points) {},
+        exponentialMovingAverage: function exponentialMovingAverage(period, values) {},
 
         // stochastic
         // macd
