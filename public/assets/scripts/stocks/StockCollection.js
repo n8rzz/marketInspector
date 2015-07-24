@@ -10,14 +10,14 @@ define([
      * @constructor
      */
     function StockCollection() {
-        this.init();
+        this._init();
     }
 
     /**
      * @method init
      * @for StockCollection
      */
-    StockCollection.prototype.init = function init() {
+    StockCollection.prototype._init = function init() {
         this.length = 0;
         this.items = [];
 
@@ -59,6 +59,15 @@ define([
      */
     StockCollection.prototype.removeGroup = function removeGroup(stockGroup) {};
 
+    StockCollection.prototype.findStockBySymbol = function findStockBySymbol(symbol) {
+        var i;
+
+        for (i = 0; i < this.length; i++) {
+            if (this.items[i].symbol === symbol) {
+                return this.items[i];
+            }
+        }
+    };
 
     return StockCollection;
 });

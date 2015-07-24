@@ -25,18 +25,18 @@
                     <a href="" data-ng-click="populateHistoricalData(stock.symbol)">
                         <div data-ng-bind="stock.symbol"></div>
                     </a>
-                    <ol data-ng-show="stock.hasHistoricalData">
-                        <li data-ng-repeat="historical in stock">
-                            <div>
-                                Date: {{ historical.date }}
-                                Open {{ historical.open }}
-                                High {{ historical.high }}
-                                Low {{ historical.low }}
-                                Close {{ historical.close }}
-                                Volume {{ historical.volume }}
+                    <!-- <ol data-ng-show="(hasHistoricalData && historicalStock[0].Symbol == stock.symbol)">
+                        <li data-ng-repeat="historical in historicalStock">
+                            <div style="font-size: 12px;">
+                                Date: {{ historical.Date }}
+                                Open {{ historical.Open }}
+                                High {{ historical.High }}
+                                Low {{ historical.Low }}
+                                Close {{ historical.Close }}
+                                Volume {{ historical.Volume }}
                             </div>
                         </li>
-                    </ol>
+                    </ol> -->
                 </li>
             </ul>
         </div>
