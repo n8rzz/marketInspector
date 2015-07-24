@@ -27,9 +27,9 @@ define([
             var i;
             var length = points.length;
             var sum = 0;
-
+debugger;
             for (i = 0; i < length; i++) {
-                sum += length[i];
+                sum += points[i];
             }
 
             return sum / period;

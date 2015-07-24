@@ -1,12 +1,14 @@
 define([
     'jquery',
     '../lib/util/assert',
+    '../lib/util/constants',
     './Stock',
     './StockCollection',
     './HistoricalPoint'
 ], function(
     $,
     assert,
+    CONSTANTS,
     Stock,
     StockCollection,
     HistoricalPoint
@@ -122,7 +124,9 @@ define([
                 return this;
             };
 
+            // TODO: use user defined date ranges
             /**
+             *
              *
              * @param symbol
              * @returns {StockController}
@@ -157,11 +161,11 @@ define([
              * @param data
              */
             StockController.prototype.addHistoricalDataToStock = function addHistoricalDataToStock(symbol, data) {
-                var i;
-                var point;
-
                 assert(symbol instanceof Stock, 'Expected symbol to be an instance of Stock');
                 assert(typeof data === 'object', 'Expected historical data set to be an object');
+
+                var i;
+                var point;
 
                 for (i = 0; i < data.length; i++) {
                     point = new HistoricalPoint();
@@ -169,7 +173,22 @@ define([
                     symbol.historicalDataSet.addPoint(point);
                 }
 
-                console.log(symbol);
+                return this.requestToCalculateAverages(symbol);
+            };
+
+            /**
+             *
+             * @param symbol {Stock}
+             */
+            StockController.prototype.requestToCalculateAverages = function requestToCalculateAverages(symbol) {
+                console.log('requestToCalculateAverages', symbol);
+
+                symbol.historicalDataSet.calculateAverage(
+                    CONSTANTS.MOVING_AVERAGE_TYPE.SMA,
+                    CONSTANTS.MOVING_AVERAGE_LENGTH.FIVE,
+                    null,
+                    null
+                );
 
             };
 

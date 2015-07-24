@@ -15,6 +15,7 @@ define([
         this.high = '';
         this.low = '';
 
+        this.sma5 = -1;
         this.sma10 = -1;
         this.sma20 = -1;
         this.sma30 = -1;
@@ -40,7 +41,7 @@ define([
      */
     HistoricalPoint.prototype.hydrate = function hydrate(historicalPoint) {
         this.symbol = historicalPoint.Symbol;
-        this.date = new Date(historicalPoint.Date);
+        this.date = historicalPoint.Date;
         this.open = parseFloat(historicalPoint.Open);
         this.high = parseFloat(historicalPoint.High);
         this.low = parseFloat(historicalPoint.Low);

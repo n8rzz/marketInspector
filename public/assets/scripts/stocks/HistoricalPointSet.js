@@ -78,12 +78,37 @@ define([
 
     /**
      *
-     * @param startDate
-     * @param endDate
-     * @param period
      */
-    HistoricalPointSet.prototype.calculateSimpleMovingAverage = function calculateSimpleMovingAverage(startDate, endDate, period) {
-        console.log('calculateSimpleMovingAverage', this.items.length);
+    HistoricalPointSet.prototype.calculateAverage = function calculateAverage(type, period, startDate, endDate) {
+        console.log('calculateSimpleMovingAverage', 'type:', type, '\tperiod:', period);
+        var i;
+        var item;
+        var index;
+        var prices = [];
+        var length = this.length - 1;
+
+        for (i = 0; i < period; i++) {
+            index = length - i;
+            item = this.items[index];
+            prices.push(item.close);
+        }
+
+        switch (type) {
+            case CONSTANTS.MOVING_AVERAGE_TYPE.SMA :
+                var smaLabel = 'sma' + period;
+                var smaValue = FinancialMath.simpleMovingAverage(period, prices);
+
+                console.log('smaLabel:', smaLabel, '\tsmaValue:', smaValue);
+
+                //this.items[index - 1].requestToAddAverageToPoint()
+
+                break;
+            case CONSTANTS.MOVING_AVERAGE_TYPE.EMA :
+                console.log('ema', index);
+                break;
+            default:
+                break;
+        }
     };
 
     /**
@@ -92,9 +117,15 @@ define([
      * @param endDate
      * @param period
      */
-    HistoricalPointSet.prototype.calculateExponentialMovingAverage = function calculateExponentialMovingAverage(startDate, endDate, period) {
+    HistoricalPointSet.prototype.calculateSimpleMovingAverage = function calculateSimpleMovingAverage(startDate, endDate, period) {};
 
-    };
+    /**
+     *
+     * @param startDate
+     * @param endDate
+     * @param period
+     */
+    HistoricalPointSet.prototype.calculateExponentialMovingAverage = function calculateExponentialMovingAverage(startDate, endDate, period) {};
 
 
     return HistoricalPointSet;
