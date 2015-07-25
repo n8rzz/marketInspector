@@ -173,21 +173,13 @@ define([
                     symbol.historicalDataSet.addPoint(point);
                 }
 
-                return this.requestToCalculateAverages(symbol);
+                symbol.historicalDataSet.buildHistoricalAverageData();
+
+                console.log(symbol);
+
+                return this;
             };
 
-            /**
-             *
-             * @param symbol {Stock}
-             */
-            StockController.prototype.requestToCalculateAverages = function requestToCalculateAverages(symbol) {
-                console.log('requestToCalculateAverages', symbol);
-
-                symbol.historicalDataSet.calculateAverage(
-                    CONSTANTS.MOVING_AVERAGE_TYPE.SMA,
-                    CONSTANTS.MOVING_AVERAGE_LENGTH.TWO_HUNDRED
-                );
-            };
 
             return new StockController();
         }

@@ -77,58 +77,90 @@ define([], function() {
          * @final
          * @type {object}
          * @memberof CONSTANTS
-         * @property MOVING_AVERAGE_LENGTH
+         * @property MOVING_AVERAGE_PERIOD
          */
-        MOVING_AVERAGE_LENGTH: {
+        MOVING_AVERAGE_PERIOD: {
             /**
              * @final
              * @type {string}
-             * @memberof MOVING_AVERAGE_LENGTH
+             * @memberof MOVING_AVERAGE_PERIOD
              * @property FIVE
              */
-            FIVE: 5,
+            FIVE: {
+                KEY: 'FIVE',
+                VALUE: 5
+            },
             /**
              * @final
              * @type {string}
-             * @memberof MOVING_AVERAGE_LENGTH
+             * @memberof MOVING_AVERAGE_PERIOD
              * @property TEN
              */
-            TEN: 10,
+            TEN: {
+                KEY: 'TEN',
+                VALUE: 10
+            },
             /**
              * @final
              * @type {string}
-             * @memberof MOVING_AVERAGE_LENGTH
+             * @memberof MOVING_AVERAGE_PERIOD
              * @property TEN
              */
-            TWENTY: 20,
+            TWENTY: {
+                KEY: 'TWENTY',
+                VALUE: 20
+            },
             /**
              * @final
              * @type {string}
-             * @memberof MOVING_AVERAGE_LENGTH
+             * @memberof MOVING_AVERAGE_PERIOD
              * @property THIRTY
              */
-            THIRTY: 30,
+            THIRTY: {
+                KEY: 'THIRTY',
+                VALUE: 30
+            },
             /**
              * @final
              * @type {string}
-             * @memberof MOVING_AVERAGE_LENGTH
+             * @memberof MOVING_AVERAGE_PERIOD
              * @property FIFTY
              */
-            FIFTY: 50,
+            FIFTY: {
+                KEY: 'FIFTY',
+                VALUE: 50
+            },
             /**
              * @final
              * @type {string}
-             * @memberof MOVING_AVERAGE_LENGTH
+             * @memberof MOVING_AVERAGE_PERIOD
              * @property ONE_HUNDRED
              */
-            ONE_HUNDRED: 100,
+            ONE_HUNDRED: {
+                KEY: 'ONE_HUNDRED',
+                VALUE: 100
+            },
             /**
              * @final
              * @type {string}
-             * @memberof MOVING_AVERAGE_LENGTH
+             * @memberof MOVING_AVERAGE_PERIOD
              * @property TWO_HUNDRED
              */
-            TWO_HUNDRED: 200
+            TWO_HUNDRED: {
+                KEY: 'TWO_HUNDRED',
+                VALUE: 200
+            },
+        },
+        /**
+         * @final
+         * @type {object}
+         * @memberof CONSTANTS
+         * @property MOVING_AVERAGE_META
+         */
+        MOVING_AVERAGE_META: {
+            ITEMS: 7,
+            MINIMUM_PERIOD_LENGTH: 5,
+            MAXIMUM_PERIOD_LENGTH: 200
         }
     };
 

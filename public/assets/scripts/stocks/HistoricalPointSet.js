@@ -3,13 +3,15 @@ define([
     '../lib/util/FastMath',
     '../lib/util/FinancialMath',
     '../lib/util/constants',
-    './HistoricalPoint'
+    './HistoricalPoint',
+    '../averages/AverageCalculationController'
 ], function(
     assert,
     FastMath,
     FinancialMath,
     CONSTANTS,
-    HistoricalPoint
+    HistoricalPoint,
+    AverageCalculationController
 ) {
     'use strict';
 
@@ -27,6 +29,7 @@ define([
     HistoricalPointSet.prototype._init = function _init() {
         this.length = 0;
         this.items = [];
+        this._averageCalculationController = new AverageCalculationController();
 
         return this;
     };
@@ -74,66 +77,33 @@ define([
     HistoricalPointSet.prototype.findLowestLow = function findLowestLow() {};
 
     /**
-     * @method calculateAverage
-     * @for HistoricalPointSet
-     * @param type
-     * @param period
+     *
      */
-    HistoricalPointSet.prototype.calculateAverage = function calculateAverage(type, period) {
-        console.log('calculateSimpleMovingAverage', 'type:', type, '\tperiod:', period);
+    HistoricalPointSet.prototype.buildHistoricalAverageData = function buildHistoricalAverageData() {
+        console.log('buildHistoricalAverageData');
 
-        // TODO: historical - new method, assembleValuesToAverage
-        var i;
-        var item;
-        var index;
-        var valuesToAverage = [];
-        var length = this.length - 1;
+        var index = 0;
+        var calculationType = 'close';
 
-        for (i = 0; i < period; i++) {
-            item = this.items[i];
-            valuesToAverage.push(item.close);
+        var items = this._setupFirstAverageCalulationSet();
+        var status = this._averageCalculationController.calculateSet(items, calculationType);
 
-            index = i;
-        }
-debugger;
-        switch (type) {
-            case CONSTANTS.MOVING_AVERAGE_TYPE.SMA :
-                // TODO: historical - new method, calculateSimpleMovingAverageForPeriod
-                var smaLabel = 'sma' + period;
-
-                // TODO: historical - new method, averageCalculationTest
-                // are there enough values to calculate the avg?
-                var smaValue = FinancialMath.simpleMovingAverage(period, valuesToAverage);
-
-                console.log('smaLabel:', smaLabel, '\tsmaValue:', smaValue);
-
-                // TODO: historical - new method, addAverageToHistoricalPoint
-                this.items[0].requestToAddAverageToPoint(period, smaValue);
-
-                break;
-            case CONSTANTS.MOVING_AVERAGE_TYPE.EMA :
-                console.log('ema', index);
-                break;
-            default:
-                break;
-        }
+        console.log(status);
     };
 
     /**
-     *
-     * @param startDate
-     * @param endDate
-     * @param period
+     * @method _setupFirstAverageCalculationSet
+     * @for HistoricalPointSet
+     * @private
      */
-    HistoricalPointSet.prototype.calculateSimpleMovingAverage = function calculateSimpleMovingAverage(startDate, endDate, period) {};
+    HistoricalPointSet.prototype._setupFirstAverageCalulationSet = function _setupFirstAverageCalculationSet() {
+        var length = CONSTANTS.MOVING_AVERAGE_META.MAXIMUM_PERIOD_LENGTH;
 
-    /**
-     *
-     * @param startDate
-     * @param endDate
-     * @param period
-     */
-    HistoricalPointSet.prototype.calculateExponentialMovingAverage = function calculateExponentialMovingAverage(startDate, endDate, period) {};
+        return this.items.slice(0, length);
+    };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     return HistoricalPointSet;

@@ -1,11 +1,13 @@
 define([
     '../lib/util/assert',
     '../lib/util/constants',
-    './BaseStockModel'
+    './BaseStockModel',
+    '../averages/AverageModel'
 ], function(
     assert,
     CONSTANTS,
-    BaseStockModel
+    BaseStockModel,
+    AverageModel
 ) {
     'use strict';
 
@@ -18,21 +20,8 @@ define([
 
         this.high = '';
         this.low = '';
-
-        this.smaFive = -1;
-        this.smaTen = -1;
-        this.smaTwenty = -1;
-        this.smaThirty = -1;
-        this.smaFifty = -1;
-        this.smaOneHunndred = -1;
-        this.smaTwoHundred = -1;
-        this.emaFive = -1;
-        this.emaTen = -1;
-        this.emaTwenty = -1;
-        this.emaThiry = -1;
-        this.emaFifty = -1;
-        this.emaOneHundred = -1;
-        this.emaTwoHundred = -1;
+        this.sma = new AverageModel(CONSTANTS.MOVING_AVERAGE_TYPE.SMA);
+        this.ema = new AverageModel(CONSTANTS.MOVING_AVERAGE_TYPE.EMA);
 
     }
 
@@ -64,7 +53,13 @@ define([
         assert(assert.isNumber(period), 'Period must be a number');
         assert(assert.isNumber(average), 'Average must be a number');
 
-        return this._setSimpleMovingAverage(period, average);
+        console.log('requestToAddAverageToPoint', '\tperiod:', period);
+
+        //if (averageType === CONSTANTS.MOVING_AVERAGE_TYPE.SMA) {
+        if ('SMA' === CONSTANTS.MOVING_AVERAGE_TYPE.SMA) {
+            return this._setSimpleMovingAverage(period, average);
+        }
+
     };
 
     /**
@@ -75,36 +70,14 @@ define([
      * @private
      */
     HistoricalPoint.prototype._setSimpleMovingAverage = function _setSimpleMovingAverage(period, average) {
-        var averageLength = CONSTANTS.MOVING_AVERAGE_LENGTH;
+        var status = this.sma.setAverage(period, average);
 
-        switch (period) {
-            case averageLength.FIVE :
-                this.smaFive = average;
-                break;
-            case averageLength.TEN :
-                this.smaTen = average;
-                break;
-            case averageLength.TWENTY :
-                this.smaTwenty = average;
-                break;
-            case averageLength.THIRTY :
-                this.smaTHIRTY = average;
-                break;
-            case averageLength.FIFTY :
-                this.smaFifty = average;
-                break;
-            case averageLength.ONE_HUNDRED :
-                this.smaOneHunndred = average;
-                break;
-            case averageLength.TWO_HUNDRED :
-                this.smaTwoHundred = average;
-                break;
-            default :
-                new Error('Period "' + period + '" is not defined in HistoricalPoint');
-                break;
+        // TODO: success_codes - need to add
+        if (status !== 0) {
+            new Error('There was a problem adding the SMA to this HistoricalPoint.  STATUS_CODE: ' + 0 );
         }
 
-        console.log(this);
+        return this;
     };
 
 
