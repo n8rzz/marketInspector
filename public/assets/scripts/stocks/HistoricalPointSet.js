@@ -1,11 +1,17 @@
 define([
     '../lib/util/assert',
     '../lib/util/FastMath',
-    './HistoricalPoint'
+    '../lib/util/FinancialMath',
+    '../lib/util/constants',
+    './HistoricalPoint',
+    '../averages/AverageCalculationController'
 ], function(
     assert,
     FastMath,
-    HistoricalPoint
+    FinancialMath,
+    CONSTANTS,
+    HistoricalPoint,
+    AverageCalculationController
 ) {
     'use strict';
 
@@ -23,6 +29,7 @@ define([
     HistoricalPointSet.prototype._init = function _init() {
         this.length = 0;
         this.items = [];
+        this._averageCalculationController = new AverageCalculationController();
 
         return this;
     };
@@ -58,39 +65,45 @@ define([
      */
     HistoricalPointSet.prototype.removeGroup = function removeGroup() {};
 
+
     /////////////////////////////////////////////////////////////////////
     ///
     /////////////////////////////////////////////////////////////////////
 
-    /**
-     *
-     */
-    HistoricalPointSet.prototype.findHighestHigh = function findHighestHigh() {};
 
-    /**
-     *
-     */
+    HistoricalPointSet.prototype.isFirstPoint = function isFirstPoint() {};
+    HistoricalPointSet.prototype.isLastPoint = function isLastPoint() {};
+    HistoricalPointSet.prototype.findHighestHigh = function findHighestHigh() {};
     HistoricalPointSet.prototype.findLowestLow = function findLowestLow() {};
 
     /**
      *
-     * @param startDate
-     * @param endDate
-     * @param period
      */
-    HistoricalPointSet.prototype.calculateSimpleMovingAverage = function calculateSimpleMovingAverage(startDate, endDate, period) {
+    HistoricalPointSet.prototype.buildHistoricalAverageData = function buildHistoricalAverageData() {
+        console.log('buildHistoricalAverageData');
 
+        var index = 0;
+        var calculationType = 'close';
+
+        var items = this._setupFirstAverageCalulationSet();
+        var status = this._averageCalculationController.calculateSet(items, calculationType);
+
+        console.log(status);
     };
 
     /**
-     *
-     * @param startDate
-     * @param endDate
-     * @param period
+     * @method _setupFirstAverageCalculationSet
+     * @for HistoricalPointSet
+     * @private
      */
-    HistoricalPointSet.prototype.calculateExponentialMovingAverage = function calculateExponentialMovingAverage(startDate, endDate, period) {
+    HistoricalPointSet.prototype._setupFirstAverageCalulationSet = function _setupFirstAverageCalculationSet() {
+        var length = CONSTANTS.MOVING_AVERAGE_META.MAXIMUM_PERIOD_LENGTH;
 
+        return this.items.slice(0, length);
     };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     return HistoricalPointSet;

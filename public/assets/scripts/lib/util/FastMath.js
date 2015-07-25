@@ -22,7 +22,7 @@ define([], function() {
          * @param  {number} b
          * @return {number} difference between a and b
          */
-        difference: function (a, b) {
+        difference: function difference(a, b) {
             return a - b;
         },
 

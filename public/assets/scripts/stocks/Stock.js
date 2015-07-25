@@ -19,6 +19,7 @@ define([
 
         this.symbol = stock.symbol;
         this.name = stock.Name;
+        this.date = stock.LastTradeDate;
         this.open = parseFloat(stock.Open);
         this.high = parseFloat(stock.DaysHigh);
         this.low = parseFloat(stock.DaysLow);
