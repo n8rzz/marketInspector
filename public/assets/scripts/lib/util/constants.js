@@ -164,6 +164,31 @@ define([], function() {
         }
     };
 
+    /**
+     * Code list of potential error statuses when adding a point to a profile
+     *
+     * @memberof CONSTANTS
+     * @property STATUS_CODES
+     */
+    CONSTANTS.STATUS_CODES = {
+        SUCCESS: {
+            KEY: 'SUCCESS',
+            VALUE: 0
+        },
+        UNDEFINED: {
+            KEY: 'UNDEFINED',
+            VALUE: 1
+        },
+        POINT_DOES_NOT_EXIST: {
+            KEY: 'POINT_DOES_NOT_EXIST',
+            VALUE: 2
+        },
+        NOT_FOUND: {
+            KEY: 'NOT_FOUND',
+            VALUE: 3
+        },
+    };
+
 
     return CONSTANTS;
 });
