@@ -175,7 +175,7 @@ define([
 
                 symbol.historicalDataSet.buildHistoricalAverageData();
 
-                console.log(symbol);
+                console.log('done', symbol);
 
                 return this;
             };

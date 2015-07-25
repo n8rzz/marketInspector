@@ -82,24 +82,35 @@ define([
     HistoricalPointSet.prototype.buildHistoricalAverageData = function buildHistoricalAverageData() {
         console.log('buildHistoricalAverageData');
 
+        var i;
         var index = 0;
         var calculationType = 'close';
 
-        var items = this._setupFirstAverageCalulationSet();
-        var status = this._averageCalculationController.calculateSet(items, calculationType);
+        for (i = 0; i < this.length; i++) {
+            var items = this._setupFirstAverageCalulationSet(index);
+            var status = this._averageCalculationController.calculateSet(items, calculationType);
+            console.log('top success_code', status, '\tindex:', index);
+            // success
 
-        console.log(status);
+            // shift items; drop first, add (CONSTANTS.MOVING_AVERAGE_META.MAXIMUM_PERIOD_LENGTH + index)
+
+            index++;
+        }
+
+
+
     };
 
     /**
      * @method _setupFirstAverageCalculationSet
      * @for HistoricalPointSet
+     * @param index {number}
      * @private
      */
-    HistoricalPointSet.prototype._setupFirstAverageCalulationSet = function _setupFirstAverageCalculationSet() {
+    HistoricalPointSet.prototype._setupFirstAverageCalulationSet = function _setupFirstAverageCalculationSet(index) {
         var length = CONSTANTS.MOVING_AVERAGE_META.MAXIMUM_PERIOD_LENGTH;
 
-        return this.items.slice(0, length);
+        return this.items.slice(index, length);
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////

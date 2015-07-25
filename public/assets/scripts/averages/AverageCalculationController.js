@@ -67,12 +67,13 @@ define([
 
             for (i = 0; i < items.length; i++) {
                 item = items[i];
-                if (!this._isAverageSolvable(i, period)) {
+                if (!this._isAverageSolvable(i, period) || !this._propertyNeedsCalculation(period, CONSTANTS.MOVING_AVERAGE_TYPE.SMA, item)) {
                     continue;
                 }
 
                 var smaValue = this._calculateAveragesForPoint(period, item);
-                item.requestToAddAverageToPoint(period, smaValue)
+                status = item.requestToAddAverageToPoint(period, smaValue)
+
 
             }
 
@@ -103,6 +104,54 @@ define([
      */
     AverageCalculationController.prototype._isAverageSolvable = function _isAverageSolvable(index, period) {
         return (this.length - index) >= period;
+    };
+
+    /**
+     *
+     * @param period {number}
+     * @param calculationMode {sting}
+     * @param item {object}
+     * @returns {boolean}
+     * @private
+     */
+    AverageCalculationController.prototype._propertyNeedsCalculation = function _propertyNeedsCalculation(period, calculationMode, item) {
+        var mode = calculationMode.toLowerCase();
+        var average = item[mode];
+
+        switch (period) {
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWO_HUNDRED.VALUE :
+                return average.twoHundred === -1;
+
+            break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.ONE_HUNDRED.VALUE :
+                return average.oneHundred === -1;
+
+            break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.FIFTY.VALUE :
+                return average.fifty === -1;
+
+            break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.THIRTY.VALUE :
+
+                return average.thirty === -1;
+            break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY.VALUE :
+
+                return average.twenty === -1;
+            break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TEN :
+
+                return average.ten === -1;
+            break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE :
+
+                return average.five === -1;
+            break;
+
+            default :
+                return true;
+                break;
+        }
     };
 
     /**
