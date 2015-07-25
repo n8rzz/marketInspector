@@ -61,14 +61,13 @@ define([
                 this.twoHundred = value;
                 break;
             default :
-                new Error('Period "' + period + '" is not defined in HistoricalPoint');
-                // TODO: success_codes - need to add
-                return 2;
+                new Error('Period "' + period + '" is not defined in HistoricalPoint. STATUS_CODE: ' + CONSTANTS.STATUS_CODES.UNDEFINED.VALUE);
+
+                return CONSTANTS.STATUS_CODES.UNDEFINED.VALUE;
                 break;
         }
 
-        // TODO: success_codes - need to add
-        return 0;
+        return CONSTANTS.STATUS_CODES.SUCCESS;
     };
 
 

@@ -11,6 +11,8 @@ define([
 ) {
     'use strict';
 
+    var STATUS_CODES = CONSTANTS.STATUS_CODES;
+
     /**
      * @class HistoricalPoint
      * @constructor
@@ -48,18 +50,25 @@ define([
      * @for HistoricalPoint
      * @param period {string|CONSTANTS}
      * @param average {number}
+     * @returns {number}
      */
     HistoricalPoint.prototype.requestToAddAverageToPoint = function requestToAddAverageToPoint(period, average) {
         assert(assert.isNumber(period), 'Period must be a number');
         assert(assert.isNumber(average), 'Average must be a number');
 
-        console.log('requestToAddAverageToPoint', '\tperiod:', period);
+        var status;
 
         //if (averageType === CONSTANTS.MOVING_AVERAGE_TYPE.SMA) {
         if ('SMA' === CONSTANTS.MOVING_AVERAGE_TYPE.SMA) {
-            return this._setSimpleMovingAverage(period, average);
+            status = this._setSimpleMovingAverage(period, average);
         }
 
+
+        if (status !== CONSTANTS.STATUS_CODES.SUCCESS) {
+
+        }
+
+        return status;
     };
 
     /**
@@ -72,9 +81,8 @@ define([
     HistoricalPoint.prototype._setSimpleMovingAverage = function _setSimpleMovingAverage(period, average) {
         var status = this.sma.setAverage(period, average);
 
-        // TODO: success_codes - need to add
-        if (status !== 0) {
-            new Error('There was a problem adding the SMA to this HistoricalPoint.  STATUS_CODE: ' + 0 );
+        if (status !== STATUS_CODES.SUCCESS) {
+            new Error('There was a problem adding the SMA to this HistoricalPoint.  STATUS_CODE: ' + STATUS_CODES.SUCCESS );
         }
 
         return this;
