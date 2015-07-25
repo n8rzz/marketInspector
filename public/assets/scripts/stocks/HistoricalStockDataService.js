@@ -39,8 +39,8 @@ define([
                 var targetUrl = QUERY_HEAD + symbol + YQL_START_DATE + startDate + YQL_END_DATE + endDate + QUERY_END;
 
                 // TODO: historicalPoint - uncomment for testing to prevent excessive API calls
-                //return $http.get(TESTING_URL);
-                return $http.get(targetUrl);
+                return $http.get(TESTING_URL);
+                //return $http.get(targetUrl);
             };
 
 
