@@ -19,6 +19,7 @@ define([
         this.id = (_id++);
         this.type = type;
 
+        //TODO: historical avg - this should be dynamic so that if avgs are ever added or removed this object can be created on the fly
         this.five = -1;
         this.ten = -1;
         this.twenty = -1;
@@ -29,9 +30,12 @@ define([
     }
 
     /**
+     * Returns the object property value for the requested period
      *
-     * @param period
-     * @returns {*}
+     * @method getAverageByPeriod
+     * @for AverageModel
+     * @param period {number}
+     * @returns {number|AverageModel}
      */
     AverageModel.prototype.getAverageByPeriod = function getAverageByPeriod(period) {
         assert(assert.isNumber(period), 'Period should be a number');
@@ -62,17 +66,15 @@ define([
                 return null;
                 break;
         }
-
-        return this;
     };
 
     /**
-     *
+     * @method setAverageByPeriod
      * @param period {number|CONSTANTS}
      * @param value {number}
      * @returns
      */
-    AverageModel.prototype.setAverage = function setAverage(period, value) {
+    AverageModel.prototype.setAverageByPeriod = function setAverageByPeriod(period, value) {
         assert(assert.isNumber(period), 'Period should be a number');
         assert(assert.isNumber(value), 'Value should be a number');
 

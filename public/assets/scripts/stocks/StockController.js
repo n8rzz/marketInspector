@@ -179,11 +179,11 @@ define([
                 assert(symbol instanceof Stock, 'Expected symbol to be an instance of Stock');
                 assert(typeof data === 'object', 'Expected historical data set to be an object');
 
-                if (symbol.historicalDataSet.hasHistoricalData()) {
-                    alert('Historical Data already exists for this Symbol');
-
-                    return this;
-                }
+                // TODO: historical avg - refactor to look for length greater than 1
+                //if (symbol.historicalDataSet.hasHistoricalData()) {
+                    //alert('Historical Data already exists for this Symbol');
+                    //return this;
+                //}
 
                 var i;
                 var point;
