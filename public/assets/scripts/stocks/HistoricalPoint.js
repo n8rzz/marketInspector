@@ -63,10 +63,10 @@ define([
 
         switch (averageType) {
             case CONSTANTS.MOVING_AVERAGE_TYPE.SMA :
-                status = this.sma.setAverage(period, average);
+                status = this.sma.setAverageByPeriod(period, average);
                 break;
             case CONSTANTS.MOVING_AVERAGE_TYPE.EMA :
-                status = this.ema.setAverage(period, average);
+                status = this.ema.setAverageByPeriod(period, average);
                 break;
             default :
                 break;
