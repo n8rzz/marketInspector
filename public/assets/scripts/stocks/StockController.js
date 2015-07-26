@@ -87,7 +87,10 @@ define([
                 return this;
             };
 
+            // TODO: rename fn
             /**
+             * Uses StockService to request data payload from server
+             * Hands response data oof to responseHandler
              *
              * @method getDataPayload
              * @for StockController
@@ -100,11 +103,16 @@ define([
             };
 
             /**
-             * @method  parseDataResponse
+             * Parses JSON data received from the server
+             *
+             * @method parseDataResponse
              * @for StockController
              * @param response {object}
+             * @returns $scope.stocks {object}
              */
             StockController.prototype.parseDataResponse = function parseDataResponse(response) {
+                assert(response.status === 200, 'There was an error getting Stock data');
+
                 var i;
                 var quote;
                 var stock;
@@ -120,20 +128,22 @@ define([
                 }
 
                 $scope.stocks = this._stockSet.items;
-
-                return this;
             };
 
             // TODO: use user defined date ranges
+            // TODO: rename fn
             /**
+             * Uses HistoricalDataService to request historical data for symbol from startDate to endDate
              *
-             *
+             * @method populateHistoricalData
+             * @fr StockController
              * @param symbol
-             * @returns {StockController}
+             * @param requestedStartDate {string}
+             * @param requestedEndDate {string}
              */
-            StockController.prototype.populateHistoricalData = function populateHistoricalData(symbol) {
-                var startDate = '2014-07-22';
-                var endDate = '2015-07-22';
+            StockController.prototype.populateHistoricalData = function populateHistoricalData(symbol, requestedStartDate, requestedEndDate) {
+                var endDate = requestedEndDate || '2015-07-22';
+                var startDate = requestedStartDate || '2014-07-22';
 
                 HistoricalStockDataService.fetchDataPayload(symbol, startDate, endDate)
                     .then(this.parseHistoricalDataResponseHandler);
@@ -142,13 +152,15 @@ define([
             };
 
             /**
+             * Parse JSON data
              *
-             * @param response
+             * @method parseHistoricalDataResponse
+             * @for StockController
+             * @param response {object}
              */
             StockController.prototype.parseHistoricalDataResponse = function parseHistoricalDataResponse(response) {
                 assert(response.status === 200, 'There was an error getting the historical data for this symbol');
 
-                $scope.hasHistoricalData = true;
                 var rawHistoricalData = response.data.query.results.quote;
                 var symbol = this._stockSet.findStockBySymbol(rawHistoricalData[0].Symbol);
 
@@ -156,13 +168,22 @@ define([
             };
 
             /**
+             * Add historical data to Stock.historicalDataSet
              *
-             * @param symbol
-             * @param data
+             * @method addHistoricalDataToStock
+             * @for StockController
+             * @param symbol {object|Stock} symbol to add historical data to
+             * @param data {object|JSON} data received from API
              */
             StockController.prototype.addHistoricalDataToStock = function addHistoricalDataToStock(symbol, data) {
                 assert(symbol instanceof Stock, 'Expected symbol to be an instance of Stock');
                 assert(typeof data === 'object', 'Expected historical data set to be an object');
+
+                if (symbol.historicalDataSet.hasHistoricalData()) {
+                    alert('Historical Data already exists for this Symbol');
+
+                    return this;
+                }
 
                 var i;
                 var point;
@@ -175,7 +196,7 @@ define([
 
                 symbol.historicalDataSet.buildHistoricalAverageData();
 
-                console.log('done', symbol);
+                console.log('operation: complete\t', symbol);
 
                 return this;
             };

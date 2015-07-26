@@ -45,27 +45,36 @@ define([
         this.volume = parseInt(historicalPoint.Volume, 10);
     };
 
+    // TODO historical - add averageType switch
     /**
      * @method requestToAddAverageToPoint
      * @for HistoricalPoint
      * @param period {string|CONSTANTS}
      * @param average {number}
+     * @param averageType {string} expects either sma or ema
      * @returns {number}
      */
     HistoricalPoint.prototype.requestToAddAverageToPoint = function requestToAddAverageToPoint(period, average) {
         assert(assert.isNumber(period), 'Period must be a number');
         assert(assert.isNumber(average), 'Average must be a number');
 
+        // TODO: historical avg - NEED TO REMOVE
+        var averageType = 'SMA';
         var status;
 
-        //if (averageType === CONSTANTS.MOVING_AVERAGE_TYPE.SMA) {
-        if ('SMA' === CONSTANTS.MOVING_AVERAGE_TYPE.SMA) {
-            status = this._setSimpleMovingAverage(period, average);
+        switch (averageType) {
+            case CONSTANTS.MOVING_AVERAGE_TYPE.SMA :
+                status = this._setSimpleMovingAverage(period, average);
+                break;
+            case CONSTANTS.MOVING_AVERAGE_TYPE.EMA :
+                status = this._setExponentialMovingAverage(period, average);
+                break;
+            default :
+                break;
         }
 
-
-        if (status !== CONSTANTS.STATUS_CODES.SUCCESS) {
-
+        if (status !== CONSTANTS.STATUS_CODES.SUCCESS.VALUE) {
+            console.log('uh oh:', CONSTANTS.STATUS_CODES.SUCCESS.VALUE);
         }
 
         return status;
@@ -81,11 +90,11 @@ define([
     HistoricalPoint.prototype._setSimpleMovingAverage = function _setSimpleMovingAverage(period, average) {
         var status = this.sma.setAverage(period, average);
 
-        if (status !== STATUS_CODES.SUCCESS) {
+        if (status !== STATUS_CODES.SUCCESS.VALUE) {
             new Error('There was a problem adding the SMA to this HistoricalPoint.  STATUS_CODE: ' + STATUS_CODES.SUCCESS );
         }
 
-        return this;
+        return status;
     };
 
 

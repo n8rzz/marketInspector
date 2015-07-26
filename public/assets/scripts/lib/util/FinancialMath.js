@@ -37,7 +37,11 @@ define([
             return sum / period;
         },
 
-        exponentialMovingAverage: function exponentialMovingAverage(period, values) {},
+        exponentialMovingAverage: function exponentialMovingAverage(period, previousAverage, previousClose) {
+            var multiplier = 2 / (period + 1);
+            var _ema = (previousClose - previousAverage) * multiplier + previousAverage;
+            console.log('ema', _ema);
+        },
 
         // stochastic
         // macd
