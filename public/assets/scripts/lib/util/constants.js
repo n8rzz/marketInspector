@@ -161,6 +161,84 @@ define([], function() {
             ITEMS: 7,
             MINIMUM_PERIOD_LENGTH: 5,
             MAXIMUM_PERIOD_LENGTH: 200
+        },
+        /**
+         * @final
+         * @type {object}
+         * @memberof CONSTANTS
+         * @property CONSTANTS
+         */
+        MOVING_AVERAGE_CALCULATION_MODE: {
+            /**
+             * @final
+             * @type {object}
+             * @memberof MOVING_AVERAGE_CALCULATION_MODE
+             * @property OPEN
+             */
+            OPEN: {
+                KEY: 'OPEN',
+                VALUE: 'open'
+            },
+            /**
+             * @final
+             * @type {object}
+             * @memberof MOVING_AVERAGE_CALCULATION_MODE
+             * @property HIGH
+             */
+            HIGH: {
+                KEY: 'HIGH',
+                VALUE: 'high'
+            },
+            /**
+             * @final
+             * @type {object}
+             * @memberof MOVING_AVERAGE_CALCULATION_MODE
+             * @property LOW
+             */
+            LOW: {
+                KEY: 'LOW',
+                VALUE: 'low'
+            },
+            /**
+             * @final
+             * @type {object}
+             * @memberof MOVING_AVERAGE_CALCULATION_MODE
+             * @property CLOSE
+             */
+            CLOSE: {
+                KEY: 'CLOSE',
+                VALUE: 'close'
+            },
+            /**
+             * @final
+             * @type {object}
+             * @memberof MOVING_AVERAGE_CALCULATION_MODE
+             * @property OHLC
+             */
+            OHLC: {
+                KEY: 'OHLC',
+                VALUE: 'ohlc'
+            },
+            /**
+             * @final
+             * @type {object}
+             * @memberof MOVING_AVERAGE_CALCULATION_MODE
+             * @property HLC
+             */
+            HLC: {
+                KEY: 'HLC',
+                VALUE: 'hlc'
+            },
+            /**
+             * @final
+             * @type {object}
+             * @memberof MOVING_AVERAGE_CALCULATION_MODE
+             * @property VOLUME
+             */
+            VOLUME: {
+                KEY: 'VOLUME',
+                VALUE: 'volume'
+            }
         }
     };
 
@@ -187,6 +265,10 @@ define([], function() {
             KEY: 'NOT_FOUND',
             VALUE: 3
         },
+        NOT_SOLVABLE: {
+            KEY: 'NOT_SOLVABLE',
+            VALUE: 4
+        }
     };
 
 
