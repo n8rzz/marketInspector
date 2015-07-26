@@ -54,20 +54,19 @@ define([
      * @param averageType {string} expects either sma or ema
      * @returns {number}
      */
-    HistoricalPoint.prototype.requestToAddAverageToPoint = function requestToAddAverageToPoint(period, average) {
+    HistoricalPoint.prototype.requestToAddAverageToPoint = function requestToAddAverageToPoint(period, average, averageType) {
         assert(assert.isNumber(period), 'Period must be a number');
         assert(assert.isNumber(average), 'Average must be a number');
+        assert((averageType === CONSTANTS.MOVING_AVERAGE_TYPE.SMA) || (averageType === CONSTANTS.MOVING_AVERAGE_TYPE.EMA), 'Unknown moving average type');
 
-        // TODO: historical avg - NEED TO REMOVE
-        var averageType = 'SMA';
         var status;
 
         switch (averageType) {
             case CONSTANTS.MOVING_AVERAGE_TYPE.SMA :
-                status = this._setSimpleMovingAverage(period, average);
+                status = this.sma.setAverageByPeriod(period, average);
                 break;
             case CONSTANTS.MOVING_AVERAGE_TYPE.EMA :
-                status = this._setExponentialMovingAverage(period, average);
+                status = this.ema.setAverageByPeriod(period, average);
                 break;
             default :
                 break;
@@ -79,25 +78,6 @@ define([
 
         return status;
     };
-
-    /**
-     * Sets the simple moving average
-     *
-     * @method setSimpleMovingAverage
-     * @for HistoricalPoint
-     * @private
-     */
-    HistoricalPoint.prototype._setSimpleMovingAverage = function _setSimpleMovingAverage(period, average) {
-        var status = this.sma.setAverage(period, average);
-
-        if (status !== STATUS_CODES.SUCCESS.VALUE) {
-            new Error('There was a problem adding the SMA to this HistoricalPoint.  STATUS_CODE: ' + STATUS_CODES.SUCCESS );
-        }
-
-        return status;
-    };
-
-
 
     // TODO: historicalPoint - add toJSON method
     // TODO: historicalPoint - add fromJSON method
