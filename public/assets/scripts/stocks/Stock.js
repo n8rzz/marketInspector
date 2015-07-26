@@ -35,6 +35,8 @@ define([
         this.oneYearRange = this.getOneYearPriceRange();
 
         this.historicalDataSet = new HistoricalPointSet();
+
+        return this._populateFirstHistoricalPointFromCurrentValues();
     }
 
     Stock.prototype = new BaseStockModel();
@@ -80,10 +82,30 @@ define([
     };
 
     /**
+     *
+     * @private
+     */
+    Stock.prototype._populateFirstHistoricalPointFromCurrentValues = function _populateFirstHistoricalPointFromCurrentValues() {
+        // TODO: historical avg - add method somewhere else to accomplish this
+        //this.historicalDataSet.addPoint(this.toJSON());
+    };
+
+
+    /**
      * @method toJSON
      * @for Stock
      */
-    Stock.prototype.toJSON = function toJSON() {};
+    Stock.prototype.toJSON = function toJSON() {
+        return {
+            'Symbol': this.symbol,
+            'Date': this.date,
+            'Open': this.open,
+            'High': this.high,
+            'Low': this.low,
+            'Close': this.close,
+            'Volume': this.volume
+        };
+    };
 
     /**
      * @method fromJSON

@@ -142,10 +142,10 @@ define([
              * @param requestedEndDate {string}
              */
             StockController.prototype.populateHistoricalData = function populateHistoricalData(symbol, requestedStartDate, requestedEndDate) {
-                var endDate = requestedEndDate || '2015-07-22';
-                var startDate = requestedStartDate || '2014-07-22';
+                var endDate = requestedEndDate || '2015-07-25';
+                var startDate = requestedStartDate || '2014-07-25';
 
-                HistoricalStockDataService.fetchDataPayload(symbol, startDate, endDate)
+                HistoricalStockDataService.fetchHistoricalDataForStockWithTimePeriod(symbol, startDate, endDate)
                     .then(this.parseHistoricalDataResponseHandler);
 
                 return this;
@@ -179,11 +179,11 @@ define([
                 assert(symbol instanceof Stock, 'Expected symbol to be an instance of Stock');
                 assert(typeof data === 'object', 'Expected historical data set to be an object');
 
-                if (symbol.historicalDataSet.hasHistoricalData()) {
-                    alert('Historical Data already exists for this Symbol');
-
-                    return this;
-                }
+                // TODO: historical avg - refactor to look for length greater than 1
+                //if (symbol.historicalDataSet.hasHistoricalData()) {
+                    //alert('Historical Data already exists for this Symbol');
+                    //return this;
+                //}
 
                 var i;
                 var point;
