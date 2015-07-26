@@ -18,6 +18,8 @@ define([
          * Calculates the simple moving average (SMA) for a given period
          * Calculated as sum(values) / period
          *
+         * @method simpleMovingAverage
+         * @for FinancialMath
          * @param period {number} number to divide sum of values by
          * @param values {Array|number} array of values to calculate average from
          * @returns {number} average of values over a given period
@@ -37,10 +39,18 @@ define([
             return sum / period;
         },
 
+        /**
+         * @method exponentialMovingAverage
+         * @for FinancialMath
+         * @param period {number|CONSTANTS}
+         * @param previousAverage {number} either ema, or sma of same period if ema doesn't exist for previous point
+         * @param previousClose {number}
+         * @returns {number}
+         */
         exponentialMovingAverage: function exponentialMovingAverage(period, previousAverage, previousClose) {
             var multiplier = 2 / (period + 1);
-            var _ema = (previousClose - previousAverage) * multiplier + previousAverage;
-            console.log('ema', _ema);
+
+            return (previousClose - previousAverage) * multiplier + previousAverage;
         },
 
         // stochastic

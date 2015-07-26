@@ -16,14 +16,12 @@ define([
 
 // http://query.yahooapis.com/v1/public/yql?q=select * from yahoo.finance.historicaldata where symbol = "AMZN" and startDate = "2015-05-23" and endDate = "2015-07-22"&format=json&env=store://datatables.org/alltableswithkeys&callback=
 
-            // TODO: FOR TESTING / DEVELOPMENT
-            //
-            //
-            //var num = Math.round(Math.random());
-            //var TESTING_URL = 'assets/scripts/stocks/data/' + num + '-oneYearHistoricalStockPrice.json';
-            //
-            //
-            //
+            //////////////////////////////////////////////////////////////////////////////////
+            // TODO: UNCOMMENT TESTING / DEVELOPMENT
+            var num = Math.round(Math.random());
+            var TESTING_URL = 'assets/scripts/stocks/data/' + num + '-oneYearHistoricalStockPrice.json';
+            //////////////////////////////////////////////////////////////////////////////////
+
 
 
             var QUERY_HEAD = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.historicaldata%20where%20symbol%20%3D%20%22';
@@ -38,9 +36,10 @@ define([
             var HistoricalStockDataService = function() {};
 
             /**
-             *
+             * @method fetchHistoricalDataForStockWithTimePeriod
+             * @for HistoricalStockDataService
              */
-            HistoricalStockDataService.prototype.fetchDataPayload = function fetchDataPayload(symbol, startDate, endDate) {
+            HistoricalStockDataService.prototype.fetchHistoricalDataForStockWithTimePeriod = function fetchHistoricalDataForStockWithTimePeriod(symbol, startDate, endDate) {
                 var targetUrl = QUERY_HEAD + symbol + YQL_START_DATE + startDate + YQL_END_DATE + endDate + QUERY_END;
 
                 // TODO: historicalPoint - uncomment for testing to prevent excessive API calls

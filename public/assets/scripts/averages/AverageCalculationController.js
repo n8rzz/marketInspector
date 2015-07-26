@@ -42,6 +42,7 @@ define([
         this.length = 0;
         this.valuesToAverage = [];
         this._validValuesToAverage = [];
+        this._prevPoint = null;
 
         return this;
     };
@@ -63,7 +64,7 @@ define([
         var period;
         var item;
         var status;
-
+        this._prevPoint = items[0];
 
         for (i = 0; i < items.length; i++) {
             item = items[i];
@@ -71,7 +72,8 @@ define([
             for (p = 0; p < PERIODS.length; p++) {
                 period = PERIODS[p];
 
-                if (!this._propertyNeedsCalculation(period, CONSTANTS.MOVING_AVERAGE_TYPE.SMA, item)) {
+                if (!this._propertyNeedsCalculation(period, CONSTANTS.MOVING_AVERAGE_TYPE.SMA, item) &&
+                    !this._propertyNeedsCalculation(period, CONSTANTS.MOVING_AVERAGE_TYPE.EMA, item)) {
                     continue
                 }
 
@@ -79,33 +81,58 @@ define([
                     break;
                 }
 
-                var smaValue = this._calculateAveragesForPoint(period, item);
-                status = item.requestToAddAverageToPoint(period, smaValue)
+                // If we made it this far, we should be able to add an average to a point without issue
+                var smaValue = this._calculateSmaAveragesForPoint(period);
+                status = item.requestToAddAverageToPoint(period, smaValue, CONSTANTS.MOVING_AVERAGE_TYPE.SMA);
+
+                var emaValue = this._calculateEmaAveragesForPoint(period);
+                status += item.requestToAddAverageToPoint(period, emaValue, CONSTANTS.MOVING_AVERAGE_TYPE.EMA);
             }
 
             if (status !== CONSTANTS.STATUS_CODES.SUCCESS.VALUE) {
                 status = CONSTANTS.STATUS_CODES.NOT_SOLVABLE.VALUE;
             }
-
+            this._prevPoint = item;
             this._updateCalculationPosition();
         }
 
         return status;
     };
 
-    // TODO: historical avg - need to refactor if we calculate both averages here
-    // TODO: historical avg - use this as the jumping point for SMA and EMA
     /**
      * @method _calculateAveragesForPoint
      * @for AverageCalculationController
      * @param period {string}
-     * @returns {number} smaValue
+     * @returns {number}
+     * @private
      */
-    AverageCalculationController.prototype._calculateAveragesForPoint = function _calculateAveragesForPoint(period) {
-        var smaValue = FinancialMath.simpleMovingAverage(period, this._validValuesToAverage);
-        //var emaValue = FinancialMath.exponentialMovingAverage(period, this._validValuesToAverage)
+    AverageCalculationController.prototype._calculateSmaAveragesForPoint = function _calculateSmaAveragesForPoint(period) {
+        return FinancialMath.simpleMovingAverage(period, this._validValuesToAverage);
+    };
 
-        return smaValue;
+    /**
+     * @method _calculateEmaAveragesForPoint
+     * @for AverageCalculationController
+     * @param period
+     * @returns {number} emaValue
+     * @private
+     */
+    AverageCalculationController.prototype._calculateEmaAveragesForPoint = function _calculateEmaAveragesForPoint(period) {
+        // TOOD: historical avg - this needs to be cleaned up
+        var previousAverage;
+        var previousEma = this._prevPoint.ema.getAverageByPeriod(period);
+        var previousSma = this._prevPoint.sma.getAverageByPeriod(period);
+        if (previousEma !== -1) {
+            previousAverage = previousEma;
+        } else {
+            previousAverage = previousSma
+        }
+
+        var previousClose = this._prevPoint.close;
+
+        var emaValue = FinancialMath.exponentialMovingAverage(period, previousAverage, previousClose);
+
+        return emaValue;
     };
 
     /**
@@ -215,11 +242,15 @@ define([
         return this;
     };
 
+    /**
+     *
+     */
     AverageCalculationController.prototype.recycle = function recycle() {
         this.index = 0;
         this.length = 0;
         this.valuesToAverage = [];
         this._validValuesToAverage = [];
+        this._prevPoint = null;
     };
 
 

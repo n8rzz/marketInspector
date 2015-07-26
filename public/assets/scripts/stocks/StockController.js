@@ -142,10 +142,10 @@ define([
              * @param requestedEndDate {string}
              */
             StockController.prototype.populateHistoricalData = function populateHistoricalData(symbol, requestedStartDate, requestedEndDate) {
-                var endDate = requestedEndDate || '2015-07-22';
-                var startDate = requestedStartDate || '2014-07-22';
+                var endDate = requestedEndDate || '2015-07-25';
+                var startDate = requestedStartDate || '2014-07-25';
 
-                HistoricalStockDataService.fetchDataPayload(symbol, startDate, endDate)
+                HistoricalStockDataService.fetchHistoricalDataForStockWithTimePeriod(symbol, startDate, endDate)
                     .then(this.parseHistoricalDataResponseHandler);
 
                 return this;
