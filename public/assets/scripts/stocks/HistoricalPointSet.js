@@ -24,7 +24,8 @@ define([
     }
 
     /**
-     *
+     * @method _init
+     * @for HistoricalPointSet
      */
     HistoricalPointSet.prototype._init = function _init() {
         this.length = 0;
@@ -35,7 +36,9 @@ define([
     };
 
     /**
-     *
+     * @method addPoint
+     * @for HistoricalPointSet
+     * @parm point {object|HistoricalPoint}
      */
     HistoricalPointSet.prototype.addPoint = function addPoint(point) {
         var index = this.length;
@@ -44,7 +47,9 @@ define([
     };
 
     /**
-     *
+     * @method addGroup
+     * @for HistoricalPointSet
+     * @parm group {object|HistoricalPoint}
      */
     HistoricalPointSet.prototype.addGroup = function addGroup(group) {
         var i;
@@ -55,14 +60,8 @@ define([
         }
     };
 
-    /**
-     *
-     */
-    HistoricalPointSet.prototype.removePoint = function removePoint() {};
 
-    /**
-     *
-     */
+    HistoricalPointSet.prototype.removePoint = function removePoint() {};
     HistoricalPointSet.prototype.removeGroup = function removeGroup() {};
 
 
@@ -73,42 +72,57 @@ define([
 
     HistoricalPointSet.prototype.isFirstPoint = function isFirstPoint() {};
     HistoricalPointSet.prototype.isLastPoint = function isLastPoint() {};
+
+    /**
+     * Checks for existing historical data
+     *
+     * @method hasHistoricalData
+     * @for HistoricalPointSet
+     * @returns {boolean}
+     */
+    HistoricalPointSet.prototype.hasHistoricalData = function hasHistoricalData() {
+        return this.length > 0;
+    };
+
+    HistoricalPointSet.prototype.getMostRecentPoint = function getMostRecentPoint() {};
+    HistoricalPointSet.prototype.getOldestPoint = function getOldestpoint() {};
     HistoricalPointSet.prototype.findHighestHigh = function findHighestHigh() {};
     HistoricalPointSet.prototype.findLowestLow = function findLowestLow() {};
 
     /**
+     * Loops through each item and sends a subset of his.items to the AveragesController to perform averages calculations
      *
+     * @method buildHistoricalAverageData
+     * @for HistoricalPointSet
+     * @param calculationMode {string} TODO: historical - implement calculation modes for averages
      */
-    HistoricalPointSet.prototype.buildHistoricalAverageData = function buildHistoricalAverageData() {
-        console.log('buildHistoricalAverageData');
-
+    HistoricalPointSet.prototype.buildHistoricalAverageData = function buildHistoricalAverageData(calculationType) {
         var i;
+        var items;
         var index = 0;
-        var calculationType = 'close';
+        var calculationMode = calculationType || 'close';
 
         for (i = 0; i < this.length; i++) {
-            var items = this._setupFirstAverageCalulationSet(index);
-            var status = this._averageCalculationController.calculateSet(items, calculationType);
-            console.log('top success_code', status, '\tindex:', index);
-            // success
-
-            // shift items; drop first, add (CONSTANTS.MOVING_AVERAGE_META.MAXIMUM_PERIOD_LENGTH + index)
+            items = this._prepareAverageCalculationSet(index);
+            this._averageCalculationController.calculateSet(items, calculationMode);
+            this._averageCalculationController.recycle();
 
             index++;
         }
-
-
-
     };
 
     /**
-     * @method _setupFirstAverageCalculationSet
+     * Returns a subset of this.items offset by the length of the longest average + index
+     * This method is used to effectively step through each item while still returning an array of this.items
+     *
+     * @method _prepareAverageCalculationSet
      * @for HistoricalPointSet
      * @param index {number}
+     * @returns {Array}
      * @private
      */
-    HistoricalPointSet.prototype._setupFirstAverageCalulationSet = function _setupFirstAverageCalculationSet(index) {
-        var length = CONSTANTS.MOVING_AVERAGE_META.MAXIMUM_PERIOD_LENGTH;
+    HistoricalPointSet.prototype._prepareAverageCalculationSet = function _prepareAverageCalculationSet(index) {
+        var length = CONSTANTS.MOVING_AVERAGE_META.MAXIMUM_PERIOD_LENGTH + index;
 
         return this.items.slice(index, length);
     };
