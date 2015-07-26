@@ -67,7 +67,7 @@ define([
                 break;
         }
 
-        return CONSTANTS.STATUS_CODES.SUCCESS;
+        return CONSTANTS.STATUS_CODES.SUCCESS.VALUE;
     };
 
 
