@@ -31,7 +31,45 @@ define([
     /**
      *
      * @param period
-     * @param value
+     * @returns {*}
+     */
+    AverageModel.prototype.getAverageByPeriod = function getAverageByPeriod(period) {
+        assert(assert.isNumber(period), 'Period should be a number');
+
+        switch (period) {
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE :
+                return this.five;
+                break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TEN.VALUE :
+                return this.ten;
+                break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY.VALUE :
+                return this.twenty;
+                break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.THIRTY.VALUE :
+                return this.thirty;
+                break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.FIFTY.VALUE :
+                return this.fifty;
+                break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.ONE_HUNDRED.VALUE :
+                return this.oneHundred;
+                break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWO_HUNDRED.VALUE :
+                return this.twoHundred;
+                break;
+            default :
+                return null;
+                break;
+        }
+
+        return this;
+    };
+
+    /**
+     *
+     * @param period {number|CONSTANTS}
+     * @param value {number}
      * @returns
      */
     AverageModel.prototype.setAverage = function setAverage(period, value) {
