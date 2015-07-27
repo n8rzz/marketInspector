@@ -84,11 +84,31 @@ define([], function() {
              * @final
              * @type {string}
              * @memberof MOVING_AVERAGE_PERIOD
+             * @property THREE
+             */
+            THREE: {
+                KEY: 'THREE',
+                VALUE: 3
+            },
+            /**
+             * @final
+             * @type {string}
+             * @memberof MOVING_AVERAGE_PERIOD
              * @property FIVE
              */
             FIVE: {
                 KEY: 'FIVE',
                 VALUE: 5
+            },
+            /**
+             * @final
+             * @type {string}
+             * @memberof MOVING_AVERAGE_PERIOD
+             * @property NINE
+             */
+            NINE: {
+                KEY: 'NINE',
+                VALUE: 9
             },
             /**
              * @final
@@ -104,11 +124,31 @@ define([], function() {
              * @final
              * @type {string}
              * @memberof MOVING_AVERAGE_PERIOD
+             * @property TWELVE
+             */
+            TWELVE: {
+                KEY: 'TWELVE',
+                VALUE: 12
+            },
+            /**
+             * @final
+             * @type {string}
+             * @memberof MOVING_AVERAGE_PERIOD
              * @property TEN
              */
             TWENTY: {
                 KEY: 'TWENTY',
                 VALUE: 20
+            },
+            /**
+             * @final
+             * @type {string}
+             * @memberof MOVING_AVERAGE_PERIOD
+             * @property TWENTY_SIX
+             */
+            TWENTY_SIX: {
+                KEY: 'TWENTY_SIX',
+                VALUE: 26
             },
             /**
              * @final
