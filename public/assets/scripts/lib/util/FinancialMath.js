@@ -53,9 +53,16 @@ define([
             return (previousClose - previousAverage) * multiplier + previousAverage;
         },
 
-        // stochastic
-        // macd
+        macd: function macd() {
+            // macd =  12 day EMA - 26 day EMA  (10 and 30)
+            // signal = EMA of Difference
+            // histogram = macd - signal
 
+
+        }
+
+
+        // stochastic
     };
 
 });

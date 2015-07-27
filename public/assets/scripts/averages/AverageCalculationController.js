@@ -1,10 +1,12 @@
 define([
     '../lib/util/assert',
     '../lib/util/FinancialMath',
+    '../lib/util/FastMath',
     '../lib/util/constants'
 ], function(
     assert,
     FinancialMath,
+    FastMath,
     CONSTANTS
 ) {
     'use strict';
@@ -15,9 +17,12 @@ define([
     ];
 
     var PERIODS = [
+        CONSTANTS.MOVING_AVERAGE_PERIOD.THREE.VALUE,
         CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE,
         CONSTANTS.MOVING_AVERAGE_PERIOD.TEN.VALUE,
+        CONSTANTS.MOVING_AVERAGE_PERIOD.TWELVE.VALUE,
         CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY.VALUE,
+        CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY_SIX.VALUE,
         CONSTANTS.MOVING_AVERAGE_PERIOD.THIRTY.VALUE,
         CONSTANTS.MOVING_AVERAGE_PERIOD.FIFTY.VALUE,
         CONSTANTS.MOVING_AVERAGE_PERIOD.ONE_HUNDRED.VALUE,
@@ -63,6 +68,7 @@ define([
         var p;
         var period;
         var item;
+        var previousMacdValues = [];
         var status;
         this._prevPoint = items[0];
 
@@ -89,12 +95,18 @@ define([
                 status += item.requestToAddAverageToPoint(period, emaValue, CONSTANTS.MOVING_AVERAGE_TYPE.EMA);
             }
 
+
             if (status !== CONSTANTS.STATUS_CODES.SUCCESS.VALUE) {
                 status = CONSTANTS.STATUS_CODES.NOT_SOLVABLE.VALUE;
             }
+
+            this._calculateMacdValuesForPoint(item, previousMacdValues);
+            previousMacdValues.push(item.macd.getMacd());
+
             this._prevPoint = item;
             this._updateCalculationPosition();
         }
+
 
         return status;
     };
@@ -113,12 +125,12 @@ define([
     /**
      * @method _calculateEmaAveragesForPoint
      * @for AverageCalculationController
-     * @param period
+     * @param period {number}
      * @returns {number} emaValue
      * @private
      */
     AverageCalculationController.prototype._calculateEmaAveragesForPoint = function _calculateEmaAveragesForPoint(period) {
-        // TOOD: historical avg - this needs to be cleaned up
+        // TODO: historical avg - this needs to be cleaned up
         var previousAverage;
         var previousEma = this._prevPoint.ema.getAverageByPeriod(period);
         var previousSma = this._prevPoint.sma.getAverageByPeriod(period);
@@ -130,9 +142,47 @@ define([
 
         var previousClose = this._prevPoint.close;
 
-        var emaValue = FinancialMath.exponentialMovingAverage(period, previousAverage, previousClose);
+        return FinancialMath.exponentialMovingAverage(period, previousAverage, previousClose);
+    };
 
-        return emaValue;
+    /**
+     * @method
+     * @for AverageCalculationController
+     * @param point {object|HistoricalPoint}
+     * @param previousMacdValues {Array}
+     * @private
+     */
+    AverageCalculationController.prototype._calculateMacdValuesForPoint = function _calculateMacdValuesForPoint(point, previousMacdValues) {
+        //if (point.hasMacdForPoint() || typeof previousPoint === 'undefined') {
+        //    return;
+        //}
+
+        var status;
+        var macd;
+        var tenEma = point.ema.twelve;
+        var thirtyEma = point.ema.twentySix;
+        var previousMacdSignalLine = point.macd.signalLine || null;
+
+        if (tenEma === -1 || thirtyEma === -1) {
+            return;
+        }
+
+        macd = FastMath.difference(tenEma, thirtyEma);
+        status = point.requestToAddMacdToPoint(macd);
+
+
+        //if (previousMacdValues.length === 5) {
+        //    var smaSignalLine = FinancialMath.simpleMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE, previousMacdValues);
+        //    status += point.requestToAddMacdSignalLineToPoint(smaSignalLine);
+        //}
+        //
+        //if (previousMacdValues.length > 5) {
+        //    var emaSignalLine = FinancialMath.exponentialMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE, previousMacdSignalLine, macd);
+        //    status += point.requestToAddMacdSignalLineToPoint(emaSignalLine);
+        //}
+
+
+        return status;
     };
 
     /**
@@ -165,34 +215,45 @@ define([
         var average = item[mode];
 
         switch (period) {
-            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWO_HUNDRED.VALUE :
-                return average.twoHundred === -1;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.THREE.VALUE :
+                return average.three === -1;
+                break;
 
-            break;
-            case CONSTANTS.MOVING_AVERAGE_PERIOD.ONE_HUNDRED.VALUE :
-                return average.oneHundred === -1;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE :
+                return average.five === -1;
+                break;
 
-            break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TEN.VALUE :
+                return average.ten === -1;
+                break;
+
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWELVE.VALUE :
+                return average.twelve === -1;
+                break;
+
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY.VALUE :
+                return average.twenty === -1;
+                break;
+
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY_SIX.VALUE :
+                return average.twentySix === -1;
+                break;
+
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.THIRTY.VALUE :
+                return average.thirty === -1;
+                break;
+
             case CONSTANTS.MOVING_AVERAGE_PERIOD.FIFTY.VALUE :
                 return average.fifty === -1;
+                break;
 
-            break;
-            case CONSTANTS.MOVING_AVERAGE_PERIOD.THIRTY.VALUE :
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.ONE_HUNDRED.VALUE :
+                return average.oneHundred === -1;
+                break;
 
-                return average.thirty === -1;
-            break;
-            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY.VALUE :
-
-                return average.twenty === -1;
-            break;
-            case CONSTANTS.MOVING_AVERAGE_PERIOD.TEN.VALUE :
-
-                return average.ten === -1;
-            break;
-            case CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE :
-
-                return average.five === -1;
-            break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWO_HUNDRED.VALUE :
+                return average.twoHundred === -1;
+                break;
 
             default :
                 return true;
@@ -243,7 +304,10 @@ define([
     };
 
     /**
+     * Resets controller properties so it can be used again
      *
+     * @method recycle
+     * @for AverageCalculationController
      */
     AverageCalculationController.prototype.recycle = function recycle() {
         this.index = 0;

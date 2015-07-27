@@ -60,7 +60,7 @@ define([
     Stock.prototype.getChangeInPercent = function getChangeInPercent() {
         var delta = FastMath.difference(this.close, this.open);
 
-        return parseFloat(((delta / this.open) * 100).toFixed(2)) + '%';
+        return parseFloat((delta / this.open).toFixed(4)) * 100;
     };
 
     /**
@@ -78,7 +78,7 @@ define([
     Stock.prototype.getOneYearPriceRange = function getOneYearPriceRange() {
         var delta = FastMath.difference(this.yearHigh, this.yearLow);
 
-        return parseFloat(delta).toFixed(3);
+        return parseFloat(delta.toFixed(3));
     };
 
     /**
