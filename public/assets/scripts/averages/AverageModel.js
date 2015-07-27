@@ -20,9 +20,12 @@ define([
         this.type = type;
 
         //TODO: historical avg - this should be dynamic so that if avgs are ever added or removed this object can be created on the fly
+        this.three = -1;
         this.five = -1;
         this.ten = -1;
+        this.twelve = -1;
         this.twenty = -1;
+        this.twentySix = -1;
         this.thirty = -1;
         this.fifty = -1;
         this.oneHundred = -1;
@@ -41,14 +44,23 @@ define([
         assert(assert.isNumber(period), 'Period should be a number');
 
         switch (period) {
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.THREE.VALUE :
+                return this.three;
+                break;
             case CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE :
                 return this.five;
                 break;
             case CONSTANTS.MOVING_AVERAGE_PERIOD.TEN.VALUE :
                 return this.ten;
                 break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWELVE.VALUE :
+                return this.twelve;
+                break;
             case CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY.VALUE :
                 return this.twenty;
+                break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY_SIX.VALUE :
+                return this.twentySix;
                 break;
             case CONSTANTS.MOVING_AVERAGE_PERIOD.THIRTY.VALUE :
                 return this.thirty;
@@ -79,14 +91,23 @@ define([
         assert(assert.isNumber(value), 'Value should be a number');
 
         switch (period) {
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.THREE.VALUE :
+                this.three = value;
+                break;
             case CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE :
                 this.five = value;
                 break;
             case CONSTANTS.MOVING_AVERAGE_PERIOD.TEN.VALUE :
                 this.ten = value;
                 break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWELVE.VALUE :
+                this.twelve = value;
+                break;
             case CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY.VALUE :
                 this.twenty = value;
+                break;
+            case CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY_SIX.VALUE :
+                this.twentySix = value;
                 break;
             case CONSTANTS.MOVING_AVERAGE_PERIOD.THIRTY.VALUE :
                 this.thirty = value;

@@ -125,6 +125,7 @@ define([
 
                     stock = new Stock(quote);
                     this._stockSet.addStock(stock);
+                    //console.log(stock);
                 }
 
                 $scope.stocks = this._stockSet.items;
@@ -185,6 +186,8 @@ define([
                     //return this;
                 //}
 
+                this.addCurrentValuesAsFirstHistoricalPoint(symbol);
+
                 var i;
                 var point;
 
@@ -201,6 +204,19 @@ define([
                 return this;
             };
 
+            /**
+             * @method addCurrentValuesAsFirstHistoricalPoint
+             * @for StockController
+             * @param symbol {string|Stock}
+             */
+            StockController.prototype.addCurrentValuesAsFirstHistoricalPoint = function addCurrentValuesAsFirstHistoricalPoint(symbol) {
+                var firstDataPoint = symbol.toJSON();
+                var point = new HistoricalPoint();
+
+                point.hydrate(firstDataPoint);
+                symbol.historicalDataSet.addPoint(point);
+
+            };
 
             return new StockController();
         }
