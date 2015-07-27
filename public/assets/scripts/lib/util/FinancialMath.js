@@ -54,7 +54,7 @@ define([
         },
 
         macd: function macd() {
-            // macd =  12 day EMA - 26 day EMA
+            // macd =  12 day EMA - 26 day EMA  (10 and 30)
             // signal = EMA of Difference
             // histogram = macd - signal
 

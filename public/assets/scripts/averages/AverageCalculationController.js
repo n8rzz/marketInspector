@@ -1,10 +1,12 @@
 define([
     '../lib/util/assert',
     '../lib/util/FinancialMath',
+    '../lib/util/FastMath',
     '../lib/util/constants'
 ], function(
     assert,
     FinancialMath,
+    FastMath,
     CONSTANTS
 ) {
     'use strict';
@@ -63,6 +65,7 @@ define([
         var p;
         var period;
         var item;
+        var previousMacdValues = [];
         var status;
         this._prevPoint = items[0];
 
@@ -89,12 +92,18 @@ define([
                 status += item.requestToAddAverageToPoint(period, emaValue, CONSTANTS.MOVING_AVERAGE_TYPE.EMA);
             }
 
+
             if (status !== CONSTANTS.STATUS_CODES.SUCCESS.VALUE) {
                 status = CONSTANTS.STATUS_CODES.NOT_SOLVABLE.VALUE;
             }
+
+            this._calculateMacdValuesForPoint(item, previousMacdValues);
+            previousMacdValues.push(item.macd.getMacd());
+
             this._prevPoint = item;
             this._updateCalculationPosition();
         }
+
 
         return status;
     };
@@ -113,12 +122,12 @@ define([
     /**
      * @method _calculateEmaAveragesForPoint
      * @for AverageCalculationController
-     * @param period
+     * @param period {number}
      * @returns {number} emaValue
      * @private
      */
     AverageCalculationController.prototype._calculateEmaAveragesForPoint = function _calculateEmaAveragesForPoint(period) {
-        // TOOD: historical avg - this needs to be cleaned up
+        // TODO: historical avg - this needs to be cleaned up
         var previousAverage;
         var previousEma = this._prevPoint.ema.getAverageByPeriod(period);
         var previousSma = this._prevPoint.sma.getAverageByPeriod(period);
@@ -130,9 +139,40 @@ define([
 
         var previousClose = this._prevPoint.close;
 
-        var emaValue = FinancialMath.exponentialMovingAverage(period, previousAverage, previousClose);
+        return FinancialMath.exponentialMovingAverage(period, previousAverage, previousClose);
+    };
 
-        return emaValue;
+    /**
+     * @method
+     * @for AverageCalculationController
+     * @param point {object|HistoricalPoint}
+     * @param previousMacdValues {Array}
+     * @private
+     */
+    AverageCalculationController.prototype._calculateMacdValuesForPoint = function _calculateMacdValuesForPoint(point, previousMacdValues) {
+        //if (point.hasMacdForPoint() || typeof previousPoint === 'undefined') {
+        //    return;
+        //}
+
+        var status;
+        var tenEma = point.ema.ten;
+        var thirtyEma = point.ema.thirty;
+
+        if (tenEma === -1 || thirtyEma === -1) {
+            return;
+        }
+        var macd = FastMath.difference(tenEma, thirtyEma);
+        status = point.requestToAddMacdToPoint(macd);
+
+
+        if (previousMacdValues.length === 5) {
+            var signalLine = FinancialMath.simpleMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE, previousMacdValues);
+            status += point.requestToAddMacdSignalLineToPoint(signalLine);
+            previousMacdValues.shift();
+        }
+
+
+        return status;
     };
 
     /**
@@ -243,7 +283,10 @@ define([
     };
 
     /**
+     * Resets controller properties so it can be used again
      *
+     * @method recycle
+     * @for AverageCalculationController
      */
     AverageCalculationController.prototype.recycle = function recycle() {
         this.index = 0;

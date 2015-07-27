@@ -2,12 +2,14 @@ define([
     '../lib/util/assert',
     '../lib/util/constants',
     './BaseStockModel',
-    '../averages/AverageModel'
+    '../averages/AverageModel',
+    '../averages/MacdModel'
 ], function(
     assert,
     CONSTANTS,
     BaseStockModel,
-    AverageModel
+    AverageModel,
+    MacdModel
 ) {
     'use strict';
 
@@ -24,6 +26,7 @@ define([
         this.low = '';
         this.sma = new AverageModel(CONSTANTS.MOVING_AVERAGE_TYPE.SMA);
         this.ema = new AverageModel(CONSTANTS.MOVING_AVERAGE_TYPE.EMA);
+        this.macd = new MacdModel();
 
     }
 
@@ -45,7 +48,6 @@ define([
         this.volume = parseInt(historicalPoint.Volume, 10);
     };
 
-    // TODO historical - add averageType switch
     /**
      * @method requestToAddAverageToPoint
      * @for HistoricalPoint
@@ -77,6 +79,36 @@ define([
         }
 
         return status;
+    };
+
+    /**
+     * @for HistoricalPoint
+     * @param macd {number}
+     * @returns {number|CONSTANTS}
+     */
+    HistoricalPoint.prototype.requestToAddMacdToPoint = function requestToAddMacdToPoint(macd) {
+        assert(assert.isNumber(macd), 'Expected MACD value to be a number');
+
+        var status = this.macd.setMacd(macd);
+
+        return status;
+    };
+
+    /**
+     * @method requestToAddMacdSignalLineToPoint
+     * @for HistoricalPoint
+     * @param signalLine {number}
+     */
+    HistoricalPoint.prototype.requestToAddMacdSignalLineToPoint = function requestToAddMacdSignalLineToPoint(signalLine) {
+        assert(assert.isNumber(signalLine), 'Expected MACD Signal line to be a number');
+
+        var status = this.macd.setSignalLine(signalLine);
+
+        return status;
+    };
+
+    HistoricalPoint.prototype.hasMacdForPoint = function hasMacdForPoint() {
+        return this.macd.hasMacd();
     };
 
     // TODO: historicalPoint - add toJSON method
