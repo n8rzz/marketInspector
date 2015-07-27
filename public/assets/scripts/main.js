@@ -4,7 +4,8 @@ require.config({
         'requirejs': '../vendor/requirejs/require',
         'jquery': '../vendor/jquery/dist/jquery',
         'angular': '../vendor/angular/angular',
-        'text': '../vendor/requirejs-text/text'
+        'text': '../vendor/requirejs-text/text',
+        'moment': '../vendor/moment/moment'
     },
     shim: {
         'angular': {
