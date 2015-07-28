@@ -1,5 +1,6 @@
 require.config({
     baseUrl: '/assets/scripts',
+    waitSeconds: 30,
     paths: {
         'requirejs': '../vendor/requirejs/require',
         'jquery': '../vendor/jquery/dist/jquery',

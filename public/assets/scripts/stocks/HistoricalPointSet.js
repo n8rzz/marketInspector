@@ -97,17 +97,14 @@ define([
      * @param calculationMode {string} TODO: historical - implement calculation modes for averages
      */
     HistoricalPointSet.prototype.buildHistoricalAverageData = function buildHistoricalAverageData(calculationType) {
-        var i;
+        var i = (this.length - CONSTANTS.MOVING_AVERAGE_PERIOD.THREE.VALUE);
         var items;
-        var index = 0;
         var calculationMode = calculationType || 'close';
 
-        for (i = 0; i < this.length; i++) {
-            items = this._prepareAverageCalculationSet(index);
+        for (i; i > 0; i--) {
+            items = this._prepareAverageCalculationSet(i);
             this._averageCalculationController.calculateSet(items, calculationMode);
             this._averageCalculationController.recycle();
-
-            index++;
         }
     };
 
@@ -122,9 +119,7 @@ define([
      * @private
      */
     HistoricalPointSet.prototype._prepareAverageCalculationSet = function _prepareAverageCalculationSet(index) {
-        var length = CONSTANTS.MOVING_AVERAGE_META.MAXIMUM_PERIOD_LENGTH + index;
-
-        return this.items.slice(index, length);
+        return this.items.slice(index, this.length);
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////
