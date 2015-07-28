@@ -112,9 +112,6 @@ define([
             if (status !== CONSTANTS.STATUS_CODES.SUCCESS.VALUE) {
                 status = CONSTANTS.STATUS_CODES.NOT_SOLVABLE.VALUE;
             }
-
-            this._prevPoint = item;
-            this._updateCalculationPosition();
         }
 
 
@@ -156,9 +153,11 @@ define([
     };
 
     /**
-     * @method
+     * @method _calculateMacdValuesForPoint
      * @for AverageCalculationController
      * @param items {Array}
+     * @param macdSignalLines {Array}
+     * @returns {number}
      * @private
      */
     AverageCalculationController.prototype._calculateMacdValuesForPoint = function _calculateMacdValuesForPoint(items, macdSignalLines) {
@@ -174,25 +173,45 @@ define([
             return;
         }
 
+        // calculate macd value
         macd = FastMath.difference(twelveEma, twentySix);
         status = point.requestToAddMacdToPoint(macd);
 
+        // if this is the first signal line, populate with an SMA
         if (macdSignalLines.length === CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE) {
             signalLine = FinancialMath.simpleMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE, macdSignalLines);
             status += point.requestToAddMacdSignalLineToPoint(signalLine);
 
-        } else if (macdSignalLines.length > CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE) {
-            signalLine = FinancialMath.exponentialMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE, prevPoint.macd.signalLine, point.macd.macdLine)
+        }
+        // all other signal lines are calculated as an EMA
+        else if (macdSignalLines.length > CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE) {
+            signalLine = FinancialMath.exponentialMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE, prevPoint.macd.signalLine, point.macd.macdLine);
             status += point.requestToAddMacdSignalLineToPoint(signalLine);
 
         }
 
-        if (prevPoint.macd.hasMacd() && prevPoint.macd.hasSignalLine()) {
+        // if the previous point has both a macd and signal line value, calculate the difference for the histogram value
+        if (prevPoint.hasMacdForPoint() && prevPoint.macd.hasSignalLine()) {
             var histogram = FastMath.difference(macd, signalLine);
             status += point.requestToAddHistogramToPoint(histogram);
         }
-debugger;
+
         return status;
+    };
+
+
+    /**
+     * @method
+     * @for AverageCalculationController
+     * @param
+     */
+    AverageCalculationController.prototype.calculateStochastic = function calculateStochastic() {
+        // %K = (Current Close - Lowest Low)/(Highest High - Lowest Low) * 100
+        // %D = 3-day SMA of %K
+        //
+        // Lowest Low = lowest low for the look-back period
+        // Highest High = highest high for the look-back period
+        // %K is multiplied by 100 to move the decimal point two places
     };
 
     /**
@@ -270,22 +289,6 @@ debugger;
                 break;
         }
     };
-
-    /**
-     * Increments the index by 1
-     * Progressively steps through the valuesToAverage array by creating a copy
-     * Starting at the index value
-     *
-     * @method _updateCalculationPosition
-     * @for AverageCalculationController
-     * @private
-     */
-    AverageCalculationController.prototype._updateCalculationPosition = function _updateCalculationPosition() {
-        this.index++;
-        this._validValuesToAverage = this.valuesToAverage.slice(this.index, this.length);
-    };
-
-
 
     /**
      * Loops through each item looking for the value that matches calculationMode and pushes them to an array

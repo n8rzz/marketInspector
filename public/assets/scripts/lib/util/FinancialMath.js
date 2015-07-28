@@ -1,11 +1,7 @@
 define([
-    './assert',
-    './FastMath',
-    './constants'
+    './assert'
 ], function(
-    assert,
-    FastMath,
-    CONSTANTS
+    assert
 ) {
     'use strict';
 
@@ -48,21 +44,14 @@ define([
          * @returns {number}
          */
         exponentialMovingAverage: function exponentialMovingAverage(period, previousAverage, previousClose) {
+            assert(assert.isNumber(period), 'Expected Period to be a number');
+            assert(assert.isNumber(previousAverage), 'Expected Previous Average to be a number');
+            assert(assert.isNumber(previousClose), 'Expected Previous Close to be a number');
+
             var multiplier = 2 / (period + 1);
 
             return (previousClose - previousAverage) * multiplier + previousAverage;
-        },
-
-        macd: function macd() {
-            // macd =  12 day EMA - 26 day EMA  (10 and 30)
-            // signal = EMA of Difference
-            // histogram = macd - signal
-
-
         }
-
-
-        // stochastic
     };
 
 });

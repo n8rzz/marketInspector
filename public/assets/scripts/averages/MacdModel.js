@@ -7,7 +7,7 @@ define([
 ) {
     'use strict';
 
-    var _id =0;
+    var _id = 0;
 
     /**
      * @class MacdModel
@@ -15,8 +15,31 @@ define([
      **/
     function MacdModel() {
         this.id = (_id++);
+
+        /**
+         * Value that represents the difference between the 12-day and 26-day EMA
+         * For a Historicalpoint
+         *
+         * @param macdLine
+         * @type {number}
+         * @default null
+         */
         this.macdLine = null;
+        /**
+         * 9-day EMA of the macdLine
+         *
+         * @param signalLine
+         * @type {number}
+         * @default null
+         */
         this.signalLine = null;
+        /**
+         * Difference between signalLine and macdLine
+         *
+         * @param histogram
+         * @type {number}
+         * @default null
+         */
         this.histogram = null;
     }
 
@@ -87,27 +110,23 @@ define([
     };
 
     /**
-     *
+     * @method hasMacd
+     * @for MacdModel
+     * @returns {boolean}
      */
     MacdModel.prototype.hasMacd = function hasMacd() {
-        return this._hasMacd();
-    };
-
-    /**
-     *
-     * @private
-     */
-    MacdModel.prototype._hasMacd = function _hasMacd() {
         return this.macdLine !== null;
     };
 
+    /**
+     * @method hasSignalLine
+     * @for MacdModel
+     * @returns {boolean}
+     */
     MacdModel.prototype.hasSignalLine = function hasSignalLine() {
-        return this._hasSignalLine();
-    };
-
-    MacdModel.prototype._hasSignalLine = function _hasSignalLine() {
         return this.signalLine !== null;
     };
+
 
     return MacdModel;
 });

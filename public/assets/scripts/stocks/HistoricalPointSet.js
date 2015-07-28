@@ -98,7 +98,7 @@ define([
         for (i = 0; i < items.length; i++) {
             item = items[i];
             // TODO: macd - should run through point
-            if (item.macd.hasMacd()) {
+            if (item.hasMacdForPoint()) {
                 signalValues.push(item.macd.getMacd());
             }
         }

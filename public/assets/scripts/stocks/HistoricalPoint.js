@@ -1,10 +1,12 @@
 define([
+    'moment',
     '../lib/util/assert',
     '../lib/util/constants',
     './BaseStockModel',
     '../averages/AverageModel',
     '../averages/MacdModel'
 ], function(
+    moment,
     assert,
     CONSTANTS,
     BaseStockModel,
@@ -107,12 +109,22 @@ define([
         return status;
     };
 
+    /**
+     * @method requestToAddHistogramToPoint
+     * @for HistoricalPoint
+     * @param histogram
+     */
     HistoricalPoint.prototype.requestToAddHistogramToPoint = function requestToAddHistogramToPoint(histogram) {
         var status = this.macd.setHistogram(histogram);
 
         return status;
     };
 
+    /**
+     * @method hasMacdForPoint
+     * @for HistoricalPoint
+     * @returns {boolean}
+     */
     HistoricalPoint.prototype.hasMacdForPoint = function hasMacdForPoint() {
         return this.macd.hasMacd();
     };
