@@ -310,6 +310,8 @@ define([], function() {
             VALUE: 4
         }
     };
+    //CONSTANTS.MACD = {};
+    //CONSTANTS.STOCHASTIC = {};
 
 
     return CONSTANTS;

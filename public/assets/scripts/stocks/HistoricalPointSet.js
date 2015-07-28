@@ -89,6 +89,23 @@ define([
     HistoricalPointSet.prototype.findHighestHigh = function findHighestHigh() {};
     HistoricalPointSet.prototype.findLowestLow = function findLowestLow() {};
 
+    HistoricalPointSet.prototype.getMacdSignalFromBeforePoint = function getMacdSignalFromBeforePoint(index) {
+        var i;
+        var item;
+        var signalValues = [];
+        var items = this.items.slice(index, this.length);
+
+        for (i = 0; i < items.length; i++) {
+            item = items[i];
+            if (item.hasMacdForPoint()) {
+                // TODO: macd - should run through point
+                signalValues.push(item.macd.getMacd());
+            }
+        }
+
+        return signalValues;
+    };
+
     /**
      * Loops through each item and sends a subset of his.items to the AveragesController to perform averages calculations
      *
@@ -97,17 +114,22 @@ define([
      * @param calculationMode {string} TODO: historical - implement calculation modes for averages
      */
     HistoricalPointSet.prototype.buildHistoricalAverageData = function buildHistoricalAverageData(calculationType) {
-        var i;
+        var i = (this.length - CONSTANTS.MOVING_AVERAGE_PERIOD.THREE.VALUE);
         var items;
-        var index = 0;
+        var stochasticItems;
+        var macdSignalLines;
+        var stochasticLength = CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY.VALUE;
         var calculationMode = calculationType || 'close';
 
-        for (i = 0; i < this.length; i++) {
-            items = this._prepareAverageCalculationSet(index);
-            this._averageCalculationController.calculateSet(items, calculationMode);
-            this._averageCalculationController.recycle();
+        for (i; i > 0; i--) {
+            items = this._prepareAverageCalculationSet(i);
+            macdSignalLines = this.getMacdSignalFromBeforePoint(i);
+            this._averageCalculationController.calculate(items, macdSignalLines, calculationMode);
 
-            index++;
+            stochasticItems = items.slice(0, stochasticLength);
+            this._averageCalculationController.calculateStochastic(stochasticItems, stochasticLength);
+
+            this._averageCalculationController.recycle();
         }
     };
 
@@ -122,9 +144,7 @@ define([
      * @private
      */
     HistoricalPointSet.prototype._prepareAverageCalculationSet = function _prepareAverageCalculationSet(index) {
-        var length = CONSTANTS.MOVING_AVERAGE_META.MAXIMUM_PERIOD_LENGTH + index;
-
-        return this.items.slice(index, length);
+        return this.items.slice(index, this.length);
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////

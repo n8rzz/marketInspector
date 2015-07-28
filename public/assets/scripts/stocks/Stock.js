@@ -1,8 +1,10 @@
 define([
+    'moment',
     './BaseStockModel',
     './HistoricalPointSet',
     '../lib/util/FastMath'
 ], function(
+    moment,
     BaseStockModel,
     HistoricalPointSet,
     FastMath
