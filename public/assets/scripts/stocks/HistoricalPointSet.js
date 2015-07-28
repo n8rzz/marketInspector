@@ -89,6 +89,23 @@ define([
     HistoricalPointSet.prototype.findHighestHigh = function findHighestHigh() {};
     HistoricalPointSet.prototype.findLowestLow = function findLowestLow() {};
 
+    HistoricalPointSet.prototype.getMacdSignalFromBeforePoint = function getMacdSignalFromBeforePoint(index) {
+        var i;
+        var item;
+        var signalValues = [];
+        var items = this.items.slice(index, this.length);
+
+        for (i = 0; i < items.length; i++) {
+            item = items[i];
+            // TODO: macd - should run through point
+            if (item.macd.hasMacd()) {
+                signalValues.push(item.macd.getMacd());
+            }
+        }
+
+        return signalValues;
+    };
+
     /**
      * Loops through each item and sends a subset of his.items to the AveragesController to perform averages calculations
      *
@@ -99,11 +116,13 @@ define([
     HistoricalPointSet.prototype.buildHistoricalAverageData = function buildHistoricalAverageData(calculationType) {
         var i = (this.length - CONSTANTS.MOVING_AVERAGE_PERIOD.THREE.VALUE);
         var items;
+        var macdSignalLines;
         var calculationMode = calculationType || 'close';
 
         for (i; i > 0; i--) {
             items = this._prepareAverageCalculationSet(i);
-            this._averageCalculationController.calculateSet(items, calculationMode);
+            macdSignalLines = this.getMacdSignalFromBeforePoint(i);
+            this._averageCalculationController.calculate(items, macdSignalLines, calculationMode);
             this._averageCalculationController.recycle();
         }
     };

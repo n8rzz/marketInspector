@@ -107,6 +107,12 @@ define([
         return status;
     };
 
+    HistoricalPoint.prototype.requestToAddHistogramToPoint = function requestToAddHistogramToPoint(histogram) {
+        var status = this.macd.setHistogram(histogram);
+
+        return status;
+    };
+
     HistoricalPoint.prototype.hasMacdForPoint = function hasMacdForPoint() {
         return this.macd.hasMacd();
     };

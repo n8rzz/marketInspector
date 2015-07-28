@@ -53,22 +53,36 @@ define([
     };
 
     /**
-     * @method calculateSet
+     * @method calculate
      * @for AverageCalculationController
-     * @param items
-     * @param calculationMode
+     * @param items {Array}
+     * @param macdSignalLines {Array}
+     * @param calculationMode {string|CONSTANTS}
      */
-    AverageCalculationController.prototype.calculateSet = function calculateSet(items, calculationMode) {
+    AverageCalculationController.prototype.calculate = function calculate(items, macdSignalLines, calculationMode) {
         assert(assert.isArray(items), 'Items should be type Array');
         assert(assert.isString(calculationMode), 'CalculationMode should be type String');
 
+        var status;
+
+        status = this._calculateAverages(items, calculationMode);
+        status += this._calculateMacdValuesForPoint(items, macdSignalLines);
+
+        return status;
+    };
+
+    /**
+     * @method calculateSet
+     * @for AverageCalculationController
+     * @param items {Array}
+     */
+    AverageCalculationController.prototype._calculateAverages = function _calculateAverages(items, calculationMode) {
         this.pullCalculationValuesFromModels(items, calculationMode);
 
         var i;
         var p;
         var period;
         var item;
-        var previousMacdValues = [];
         var status;
         this._prevPoint = items[0];
 
@@ -95,13 +109,9 @@ define([
                 status += item.requestToAddAverageToPoint(period, emaValue, CONSTANTS.MOVING_AVERAGE_TYPE.EMA);
             }
 
-
             if (status !== CONSTANTS.STATUS_CODES.SUCCESS.VALUE) {
                 status = CONSTANTS.STATUS_CODES.NOT_SOLVABLE.VALUE;
             }
-
-            this._calculateMacdValuesForPoint(item, previousMacdValues);
-            previousMacdValues.push(item.macd.getMacd());
 
             this._prevPoint = item;
             this._updateCalculationPosition();
@@ -148,40 +158,40 @@ define([
     /**
      * @method
      * @for AverageCalculationController
-     * @param point {object|HistoricalPoint}
-     * @param previousMacdValues {Array}
+     * @param items {Array}
      * @private
      */
-    AverageCalculationController.prototype._calculateMacdValuesForPoint = function _calculateMacdValuesForPoint(point, previousMacdValues) {
-        //if (point.hasMacdForPoint() || typeof previousPoint === 'undefined') {
-        //    return;
-        //}
-
+    AverageCalculationController.prototype._calculateMacdValuesForPoint = function _calculateMacdValuesForPoint(items, macdSignalLines) {
         var status;
         var macd;
-        var tenEma = point.ema.twelve;
-        var thirtyEma = point.ema.twentySix;
-        var previousMacdSignalLine = point.macd.signalLine || null;
+        var signalLine;
+        var point = items[0];
+        var prevPoint = items[1];
+        var twelveEma = point.ema.twelve;
+        var twentySix = point.ema.twentySix;
 
-        if (tenEma === -1 || thirtyEma === -1) {
+        if (twelveEma === -1 || twentySix === -1) {
             return;
         }
 
-        macd = FastMath.difference(tenEma, thirtyEma);
+        macd = FastMath.difference(twelveEma, twentySix);
         status = point.requestToAddMacdToPoint(macd);
 
+        if (macdSignalLines.length === CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE) {
+            signalLine = FinancialMath.simpleMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE, macdSignalLines);
+            status += point.requestToAddMacdSignalLineToPoint(signalLine);
 
-        //if (previousMacdValues.length === 5) {
-        //    var smaSignalLine = FinancialMath.simpleMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE, previousMacdValues);
-        //    status += point.requestToAddMacdSignalLineToPoint(smaSignalLine);
-        //}
-        //
-        //if (previousMacdValues.length > 5) {
-        //    var emaSignalLine = FinancialMath.exponentialMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.FIVE.VALUE, previousMacdSignalLine, macd);
-        //    status += point.requestToAddMacdSignalLineToPoint(emaSignalLine);
-        //}
+        } else if (macdSignalLines.length > CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE) {
+            signalLine = FinancialMath.exponentialMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.NINE.VALUE, prevPoint.macd.signalLine, point.macd.macdLine)
+            status += point.requestToAddMacdSignalLineToPoint(signalLine);
 
+        }
 
+        if (prevPoint.macd.hasMacd() && prevPoint.macd.hasSignalLine()) {
+            var histogram = FastMath.difference(macd, signalLine);
+            status += point.requestToAddHistogramToPoint(histogram);
+        }
+debugger;
         return status;
     };
 

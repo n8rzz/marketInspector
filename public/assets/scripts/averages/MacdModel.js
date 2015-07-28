@@ -15,9 +15,9 @@ define([
      **/
     function MacdModel() {
         this.id = (_id++);
-        this.macdLine = -1;
-        this.signalLine = -1;
-        this.histogram = -1;
+        this.macdLine = null;
+        this.signalLine = null;
+        this.histogram = null;
     }
 
     /**
@@ -51,7 +51,7 @@ define([
      * @for MacModel
      * @param histogram {number}
      */
-    MacdModel.prototype.histogram = function setHistogram(histogram) {
+    MacdModel.prototype.setHistogram = function setHistogram(histogram) {
         assert(assert.isNumber(histogram), 'Expected Histogram to be a number');
 
         this.histogram = histogram;
@@ -98,9 +98,16 @@ define([
      * @private
      */
     MacdModel.prototype._hasMacd = function _hasMacd() {
-        return this.macdLine !== -1;
+        return this.macdLine !== null;
     };
 
+    MacdModel.prototype.hasSignalLine = function hasSignalLine() {
+        return this._hasSignalLine();
+    };
+
+    MacdModel.prototype._hasSignalLine = function _hasSignalLine() {
+        return this.signalLine !== null;
+    };
 
     return MacdModel;
 });
