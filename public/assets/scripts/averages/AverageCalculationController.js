@@ -53,6 +53,14 @@ define([
     };
 
     /**
+     * This is the entry point for all average calculations.  This controller is fed items from the HistoricalPointSet
+     * Starting with the oldest (last) item in the set to the newest.  The methods below solve for the values that can
+     * be solved, and ignore the ones that can't.  Eventually, once the data set is larger, we can begin to solve for
+     * the larger averages.
+     *
+     * This solves the simple and exponential moving averages first, then solves for the MACD and then finally the Stochastic
+     *
+     *
      * @method calculate
      * @for AverageCalculationController
      * @param items {Array}
@@ -77,7 +85,7 @@ define([
      * @param items {Array}
      */
     AverageCalculationController.prototype._calculateAverages = function _calculateAverages(items, calculationMode) {
-        this.pullCalculationValuesFromModels(items, calculationMode);
+        this.pullCalculationValuesFromModelsToAverage(items, calculationMode);
 
         var i;
         var p;
@@ -193,25 +201,66 @@ define([
         // if the previous point has both a macd and signal line value, calculate the difference for the histogram value
         if (prevPoint.hasMacdForPoint() && prevPoint.macd.hasSignalLine()) {
             var histogram = FastMath.difference(macd, signalLine);
-            status += point.requestToAddHistogramToPoint(histogram);
+            status += point.requestToAddMacdHistogramToPoint(histogram);
         }
 
         return status;
     };
 
+    /**
+     *
+     * @method calculateStochastic
+     * @for AverageCalculationController
+     * @param items {Array}
+     * @param stochasticPeriod {number|CONSTANTS}
+     */
+    AverageCalculationController.prototype.calculateStochastic = function calculateStochastic(items, stochasticPeriod) {
+        if (items.length < stochasticPeriod) {
+            return;
+        }
+
+        return this._calculateStochastic(items, stochasticPeriod);
+    };
 
     /**
-     * @method
+     * @method _calculateStochastic
      * @for AverageCalculationController
-     * @param
+     * @param items {Array}
+     * @param period {number}
      */
-    AverageCalculationController.prototype.calculateStochastic = function calculateStochastic() {
-        // %K = (Current Close - Lowest Low)/(Highest High - Lowest Low) * 100
-        // %D = 3-day SMA of %K
-        //
-        // Lowest Low = lowest low for the look-back period
-        // Highest High = highest high for the look-back period
-        // %K is multiplied by 100 to move the decimal point two places
+    AverageCalculationController.prototype._calculateStochastic = function _calculateStochastic(items, period) {
+        var status;
+        var prevPercentKValues = [];
+        var point = items[0];
+        var highs = this.pullCalculationValuesFromModel(items, 'high');
+        var highestHigh = Math.max.apply(Math, highs);
+        var lows = this.pullCalculationValuesFromModel(items, 'low');
+        var lowestLow = Math.min.apply(Math, lows);
+        var percentK = FinancialMath.stochasticPercentK(point.close, lowestLow, highestHigh);
+
+        for (var i = 0; i < 4; i++) {
+            // TODO: historical stochastic - move to point
+            var previousK = items[i].stochastic.getPercentK();
+            if ( previousK !== null) {
+                prevPercentKValues.push(previousK);
+            }
+        }
+
+        if (prevPercentKValues.length === 3) {
+            var percentD = FinancialMath.simpleMovingAverage(CONSTANTS.MOVING_AVERAGE_PERIOD.THREE.VALUE, prevPercentKValues);
+        }
+
+        var stochastic = {
+            'percentK': percentK,
+            'percentD': percentD,
+            'highestHigh': highestHigh,
+            'lowestLow': lowestLow,
+            'period': period
+        };
+
+        status = point.requestToAddStochasticToPoint(stochastic);
+
+        return status;
     };
 
     /**
@@ -299,21 +348,33 @@ define([
      * @param items {object|HistoricalPoint}
      * @param calculationMode {string}
      */
-    AverageCalculationController.prototype.pullCalculationValuesFromModels = function pullCalculationValuesFromModels(items, calculationMode) {
+    AverageCalculationController.prototype.pullCalculationValuesFromModelsToAverage = function pullCalculationValuesFromModelsToAverage(items, calculationMode) {
         // TODO: historical avg - switch mode to enumeration
 
-        var i;
-        var item;
-
-        for (i = 0; i < items.length; i++) {
-            item = items[i];
-            this.valuesToAverage.push(item[calculationMode]);
-        }
-
+        this.valuesToAverage = this.pullCalculationValuesFromModel(items, calculationMode);
         this.length = this.valuesToAverage.length;
         this._validValuesToAverage = this.valuesToAverage.slice(0);
 
         return this;
+    };
+
+    /**
+     *
+     * @param items
+     * @param calculationMode
+     * @returns {Array}
+     */
+    AverageCalculationController.prototype.pullCalculationValuesFromModel = function pullCalculationValuesFromModel(items, calculationMode) {
+        var i;
+        var item;
+        var values = [];
+
+        for (i = 0; i < items.length; i++) {
+            item = items[i];
+            values.push(item[calculationMode]);
+        }
+
+        return values;
     };
 
     /**

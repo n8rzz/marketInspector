@@ -97,8 +97,8 @@ define([
 
         for (i = 0; i < items.length; i++) {
             item = items[i];
-            // TODO: macd - should run through point
             if (item.hasMacdForPoint()) {
+                // TODO: macd - should run through point
                 signalValues.push(item.macd.getMacd());
             }
         }
@@ -116,13 +116,19 @@ define([
     HistoricalPointSet.prototype.buildHistoricalAverageData = function buildHistoricalAverageData(calculationType) {
         var i = (this.length - CONSTANTS.MOVING_AVERAGE_PERIOD.THREE.VALUE);
         var items;
+        var stochasticItems;
         var macdSignalLines;
+        var stochasticLength = CONSTANTS.MOVING_AVERAGE_PERIOD.TWENTY.VALUE;
         var calculationMode = calculationType || 'close';
 
         for (i; i > 0; i--) {
             items = this._prepareAverageCalculationSet(i);
             macdSignalLines = this.getMacdSignalFromBeforePoint(i);
             this._averageCalculationController.calculate(items, macdSignalLines, calculationMode);
+
+            stochasticItems = items.slice(0, stochasticLength);
+            this._averageCalculationController.calculateStochastic(stochasticItems, stochasticLength);
+
             this._averageCalculationController.recycle();
         }
     };

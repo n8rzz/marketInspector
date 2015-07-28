@@ -4,14 +4,16 @@ define([
     '../lib/util/constants',
     './BaseStockModel',
     '../averages/AverageModel',
-    '../averages/MacdModel'
+    '../averages/MacdModel',
+    '../averages/StochasticModel'
 ], function(
     moment,
     assert,
     CONSTANTS,
     BaseStockModel,
     AverageModel,
-    MacdModel
+    MacdModel,
+    StochasticModel
 ) {
     'use strict';
 
@@ -29,6 +31,7 @@ define([
         this.sma = new AverageModel(CONSTANTS.MOVING_AVERAGE_TYPE.SMA);
         this.ema = new AverageModel(CONSTANTS.MOVING_AVERAGE_TYPE.EMA);
         this.macd = new MacdModel();
+        this.stochastic = new StochasticModel();
 
     }
 
@@ -110,15 +113,73 @@ define([
     };
 
     /**
-     * @method requestToAddHistogramToPoint
+     * @method requestToAddMacdHistogramToPoint
      * @for HistoricalPoint
      * @param histogram
      */
-    HistoricalPoint.prototype.requestToAddHistogramToPoint = function requestToAddHistogramToPoint(histogram) {
+    HistoricalPoint.prototype.requestToAddMacdHistogramToPoint = function requestToAddMacdHistogramToPoint(histogram) {
         var status = this.macd.setHistogram(histogram);
 
         return status;
     };
+
+    HistoricalPoint.prototype.requestToAddStochasticToPoint = function requestToAddStochasticToPoint(stochastic) {
+        var status = this.stochastic.fromJSON(stochastic);
+
+        return status;
+    };
+
+    /**
+     *
+     * @param period
+     */
+    //HistoricalPoint.prototype.requestToAddStochasticPeriodToPoint = function requestToAddStochasticPeriodToPoint(period) {
+    //    var status = this.stochastic.setPeriod(period);
+    //
+    //    return status;
+    //};
+
+    /**
+     *
+     * @param highestHigh
+     */
+    //HistoricalPoint.prototype.requestToAddStochasticHighestHighToPoint = function requestToAddStochasticHighestHighToPoint(highestHigh) {
+    //    var status = this.stochastic.setHighestHigh(highestHigh);
+    //
+    //    return status;
+    //};
+
+    /**
+     *
+     * @param lowestLow
+     */
+    //HistoricalPoint.prototype.requestToAddStochasticLowestLowToPoint = function requestToAddStochasticLowestLowToPoint(lowestLow) {
+    //    var status = this.stochastic.setLowestLow(lowestLow);
+    //
+    //    return status;
+    //};
+
+    /**
+     * @method requestToAddStochasticPercentKToPoint
+     * @for HistoricalPoint
+     * @param percentK {number}
+     */
+    //HistoricalPoint.prototype.requestToAddStochasticPercentKToPoint = function requestToAddStochasticPercentKToPoint(percentK) {
+    //    var status = this.stochastic.setPercentK(percentK);
+    //
+    //    return status;
+    //};
+
+    /**
+     * @method requestToAddStochasticPercentDToPoint
+     * @for Historicalpoint
+     * @param percentD {number}
+     */
+    //HistoricalPoint.prototype.requestToAddStochasticPercentDToPoint = function requestToAddStochasticPercentDToPoint(percentD) {
+    //    var status = this.stochastic.setPercentD(percentD);
+    //
+    //    return status;
+    //};
 
     /**
      * @method hasMacdForPoint
