@@ -9,6 +9,7 @@
     "jquery": "~2.1.4",
     "angular": "~1.4.2",
     "requirejs": "~2.1.19",
-    "requirejs-text": "~2.0.14"
+    "requirejs-text": "~2.0.14",
+    "moment": "~2.10.5"
   }
 }

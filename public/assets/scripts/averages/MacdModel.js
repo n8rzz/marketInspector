@@ -7,7 +7,7 @@ define([
 ) {
     'use strict';
 
-    var _id =0;
+    var _id = 0;
 
     /**
      * @class MacdModel
@@ -15,9 +15,32 @@ define([
      **/
     function MacdModel() {
         this.id = (_id++);
-        this.macdLine = -1;
-        this.signalLine = -1;
-        this.histogram = -1;
+
+        /**
+         * Value that represents the difference between the 12-day and 26-day EMA
+         * For a Historicalpoint
+         *
+         * @param macdLine
+         * @type {number}
+         * @default null
+         */
+        this.macdLine = null;
+        /**
+         * 9-day EMA of the macdLine
+         *
+         * @param signalLine
+         * @type {number}
+         * @default null
+         */
+        this.signalLine = null;
+        /**
+         * Difference between signalLine and macdLine
+         *
+         * @param histogram
+         * @type {number}
+         * @default null
+         */
+        this.histogram = null;
     }
 
     /**
@@ -51,7 +74,7 @@ define([
      * @for MacModel
      * @param histogram {number}
      */
-    MacdModel.prototype.histogram = function setHistogram(histogram) {
+    MacdModel.prototype.setHistogram = function setHistogram(histogram) {
         assert(assert.isNumber(histogram), 'Expected Histogram to be a number');
 
         this.histogram = histogram;
@@ -87,18 +110,21 @@ define([
     };
 
     /**
-     *
+     * @method hasMacd
+     * @for MacdModel
+     * @returns {boolean}
      */
     MacdModel.prototype.hasMacd = function hasMacd() {
-        return this._hasMacd();
+        return this.macdLine !== null;
     };
 
     /**
-     *
-     * @private
+     * @method hasSignalLine
+     * @for MacdModel
+     * @returns {boolean}
      */
-    MacdModel.prototype._hasMacd = function _hasMacd() {
-        return this.macdLine !== -1;
+    MacdModel.prototype.hasSignalLine = function hasSignalLine() {
+        return this.signalLine !== null;
     };
 
 

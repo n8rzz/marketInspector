@@ -1,11 +1,7 @@
 define([
-    './assert',
-    './FastMath',
-    './constants'
+    './assert'
 ], function(
-    assert,
-    FastMath,
-    CONSTANTS
+    assert
 ) {
     'use strict';
 
@@ -48,21 +44,27 @@ define([
          * @returns {number}
          */
         exponentialMovingAverage: function exponentialMovingAverage(period, previousAverage, previousClose) {
+            assert(assert.isNumber(period), 'Expected Period to be a number');
+            assert(assert.isNumber(previousAverage), 'Expected Previous Average to be a number');
+            assert(assert.isNumber(previousClose), 'Expected Previous Close to be a number');
+
             var multiplier = 2 / (period + 1);
 
             return (previousClose - previousAverage) * multiplier + previousAverage;
         },
+        /**
+         *
+         * @param currentClose
+         * @param lowestLow
+         * @param highestHigh
+         */
+        stochasticPercentK: function stochasticPercentK(currentClose, lowestLow, highestHigh) {
+            assert(assert.isNumber(currentClose), 'Expected Current Close to be a number');
+            assert(assert.isNumber(lowestLow), 'Expected Lowest Low to be a number');
+            assert(assert.isNumber(highestHigh), 'Expected Highest High to be a number');
 
-        macd: function macd() {
-            // macd =  12 day EMA - 26 day EMA  (10 and 30)
-            // signal = EMA of Difference
-            // histogram = macd - signal
-
-
+            return ((currentClose - lowestLow) / (highestHigh / lowestLow)) * 100;
         }
-
-
-        // stochastic
     };
 
 });
