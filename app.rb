@@ -16,6 +16,8 @@ class MarketInspector < Sinatra::Base
   register Sinatra::Contrib
   register Sinatra::Routes
 
+    set :public_folder, Proc.new { File.join(root, 'public/web') }
+
   after do
     ActiveRecord::Base.connection.close
   end
